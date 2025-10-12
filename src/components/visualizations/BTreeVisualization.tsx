@@ -43,9 +43,8 @@ export default function BTreeVisualization({ speed }: BTreeVisualizationProps) {
   const minKeys = Math.ceil(maxDegree / 2) - 1;
 
   // Constants for visualization
-  const NODE_WIDTH = 50;
-  const NODE_HEIGHT = 40;
-  const LEVEL_HEIGHT = 100;
+  const NODE_WIDTH = 40;
+  const NODE_HEIGHT = 32;
 
   // Generate truly unique ID
   const generateId = useCallback(() => {
@@ -71,24 +70,20 @@ export default function BTreeVisualization({ speed }: BTreeVisualizationProps) {
 
   // Simple position calculation
   const calculatePositions = useCallback(
-    (node: BTreeNode | null, x = 400, y = 100): BTreeNode | null => {
+    (node: BTreeNode | null, x = 0, y = 0): BTreeNode | null => {
       if (!node) return null;
 
       const newNode = { ...node, x, y };
 
       if (!node.isLeaf && node.children.length > 0) {
-        const spacing = 120;
+        const spacing = 90;
         const startX = x - ((node.children.length - 1) * spacing) / 2;
 
         for (let i = 0; i < node.children.length; i++) {
           const child = node.children[i];
           if (child) {
             const childX = startX + i * spacing;
-            const positionedChild = calculatePositions(
-              child,
-              childX,
-              y + LEVEL_HEIGHT
-            );
+            const positionedChild = calculatePositions(child, childX, y + 70);
             if (positionedChild) {
               newNode.children[i] = positionedChild;
             }
@@ -619,18 +614,20 @@ export default function BTreeVisualization({ speed }: BTreeVisualizationProps) {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-2 text-foreground">B-Tree</h2>
-        <p className="text-muted-foreground">
+    <div className="h-full flex flex-col p-2 sm:p-0">
+      <div className="mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold mb-2 text-foreground">
+          B-Tree
+        </h2>
+        <p className="text-sm sm:text-base text-muted-foreground">
           A self-balancing tree where nodes can contain multiple keys. Used in
           databases and file systems.
         </p>
       </div>
 
-      <div className="flex gap-6 flex-1">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 flex-1">
         {/* Controls */}
-        <div className="w-80 space-y-4">
+        <div className="w-full lg:w-80 space-y-3 lg:space-y-4 order-2 lg:order-1 max-h-[50vh] lg:max-h-none overflow-y-auto lg:overflow-visible">
           {/* Degree Selection */}
           <div className="space-y-2">
             <label className="text-sm font-medium">Maximum Degree</label>
@@ -873,20 +870,29 @@ export default function BTreeVisualization({ speed }: BTreeVisualizationProps) {
         </div>
 
         {/* Visualization */}
-        <div className="flex-1 relative overflow-hidden">
+        <div className="flex-1 relative min-h-[300px] lg:min-h-[400px] order-1 lg:order-2 bg-background rounded-lg border overflow-hidden">
           {root ? (
-            <svg className="w-full h-full bg-background">
-              {renderConnections(root)}
-              {renderAllNodes(root)}
-            </svg>
+            <div className="w-full h-full flex items-center justify-center p-4">
+              <svg
+                className="w-full h-full max-w-full max-h-full"
+                viewBox="-300 -40 600 320"
+                preserveAspectRatio="xMidYMid meet"
+                style={{ minHeight: "250px" }}
+              >
+                <g>
+                  {renderConnections(root)}
+                  {renderAllNodes(root)}
+                </g>
+              </svg>
+            </div>
           ) : (
             <div className="flex items-center justify-center h-full text-muted-foreground">
               <div className="text-center">
-                <Network className="h-12 w-12 mx-auto mb-4 opacity-40" />
-                <p className="text-base font-medium mb-2">
+                <Network className="h-8 w-8 sm:h-12 sm:w-12 mx-auto mb-4 opacity-40" />
+                <p className="text-sm sm:text-base font-medium mb-2">
                   Insert numbers to build your B-Tree
                 </p>
-                <p className="text-sm opacity-60">
+                <p className="text-xs sm:text-sm opacity-60">
                   Degree {maxDegree}: {minKeys}-{maxKeys} keys per node
                 </p>
               </div>

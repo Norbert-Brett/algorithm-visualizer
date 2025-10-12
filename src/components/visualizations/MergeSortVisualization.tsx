@@ -181,17 +181,17 @@ export default function MergeSortVisualization({ speed }: MergeSortVisualization
   };
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-2 text-foreground">Merge Sort Visualization</h2>
-        <p className="text-muted-foreground">
+    <div className="h-full flex flex-col p-2 sm:p-0">
+      <div className="mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold mb-2 text-foreground">Merge Sort Visualization</h2>
+        <p className="text-sm sm:text-base text-muted-foreground">
           Merge sort divides the array into halves, recursively sorts them, and then merges the sorted halves.
         </p>
       </div>
 
-      <div className="flex gap-6 flex-1">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 flex-1">
         {/* Controls */}
-        <div className="w-80 space-y-4">
+        <div className="w-full lg:w-80 space-y-4 order-2 lg:order-1">
           <div className="space-y-2">
             <label className="text-sm font-medium">Add Element (1-100)</label>
             <div className="flex gap-2">
@@ -266,13 +266,13 @@ export default function MergeSortVisualization({ speed }: MergeSortVisualization
         </div>
 
         {/* Visualization */}
-        <div className="flex-1 flex items-end justify-center pb-20">
-          <div className="flex items-end gap-2">
+        <div className="flex-1 flex items-end justify-center pb-10 lg:pb-20 min-h-[300px] order-1 lg:order-2 overflow-x-auto">
+          <div className="flex items-end gap-1 sm:gap-2 min-w-max">
             {array.map((item, index) => (
               <motion.div
                 key={item.id}
                 layout
-                className="w-12 flex flex-col items-center gap-2"
+                className="w-8 sm:w-12 flex flex-col items-center gap-1 sm:gap-2"
               >
                 <motion.div
                   className={`
@@ -284,17 +284,17 @@ export default function MergeSortVisualization({ speed }: MergeSortVisualization
                       item.isInLeftSubarray ? 'bg-blue-500' :
                       item.isInRightSubarray ? 'bg-purple-500' : 'bg-muted-foreground'}
                   `}
-                  style={{ height: `${item.value * 3}px` }}
+                  style={{ height: `${item.value * 2}px`, minHeight: '20px' }}
                   animate={{
                     scale: item.isComparing || item.isMerging ? 1.1 : 1,
                   }}
                   transition={{ duration: 0.3 }}
                 >
-                  <span className="text-white text-xs font-mono mb-1">
+                  <span className="text-white text-[10px] sm:text-xs font-mono mb-1">
                     {item.value}
                   </span>
                 </motion.div>
-                <div className="text-xs text-muted-foreground font-mono font-medium">
+                <div className="text-[10px] sm:text-xs text-muted-foreground font-mono font-medium">
                   {index}
                 </div>
               </motion.div>

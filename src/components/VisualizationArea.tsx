@@ -1,6 +1,8 @@
 "use client";
 
 import { Algorithm } from "./AlgorithmVisualizer";
+import { Button } from "./ui/button";
+import { Menu } from "lucide-react";
 import StackVisualization from "./visualizations/StackVisualization";
 import QueueVisualization from "./visualizations/QueueVisualization";
 import BSTVisualization from "./visualizations/BSTVisualization";
@@ -15,6 +17,7 @@ interface VisualizationAreaProps {
   algorithm: Algorithm;
   isPlaying: boolean;
   speed: number;
+  onToggleSidebar?: () => void;
 }
 
 // Placeholder component for algorithms not yet implemented
@@ -31,7 +34,7 @@ const ComingSoonVisualization = ({ algorithmName }: { algorithmName: string }) =
   </div>
 );
 
-export default function VisualizationArea({ algorithm, isPlaying, speed }: VisualizationAreaProps) {
+export default function VisualizationArea({ algorithm, isPlaying, speed, onToggleSidebar }: VisualizationAreaProps) {
   const renderVisualization = () => {
     switch (algorithm) {
       // Data Structures
@@ -92,8 +95,22 @@ export default function VisualizationArea({ algorithm, isPlaying, speed }: Visua
   };
 
   return (
-    <div className="h-full p-6">
-      {renderVisualization()}
+    <div className="h-full p-3 sm:p-6 relative">
+      {/* Mobile menu button */}
+      {onToggleSidebar && (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onToggleSidebar}
+          className="absolute top-3 left-3 z-10 lg:hidden"
+        >
+          <Menu className="h-4 w-4" />
+        </Button>
+      )}
+      
+      <div className="h-full pt-12 lg:pt-0">
+        {renderVisualization()}
+      </div>
     </div>
   );
 }

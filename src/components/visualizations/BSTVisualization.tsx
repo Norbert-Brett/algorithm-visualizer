@@ -37,13 +37,13 @@ export default function BSTVisualization({ speed }: BSTVisualizationProps) {
 
   // Calculate positions for tree nodes with improved spacing
   const calculatePositions = useCallback(
-    (node: TreeNode | null, x = 400, y = 100, level = 0): TreeNode | null => {
+    (node: TreeNode | null, x = 0, y = 0, level = 0): TreeNode | null => {
       if (!node) return null;
 
-      // Dynamic spacing that provides better visual separation
-      const baseSpacing = 120;
-      const spacing = Math.max(60, baseSpacing / Math.pow(1.4, level));
-      const verticalSpacing = 90;
+      // More compact spacing for better fit with overlap prevention
+      const baseSpacing = 100;
+      const spacing = Math.max(50, baseSpacing / Math.pow(1.3, level));
+      const verticalSpacing = 60;
 
       const newNode = { ...node, x, y };
 
@@ -267,7 +267,7 @@ export default function BSTVisualization({ speed }: BSTVisualizationProps) {
     if (!node || (!node.left && !node.right)) return [];
 
     const connections: React.ReactElement[] = [];
-    const nodeRadius = 22;
+    const nodeRadius = 18;
 
     if (
       node.left &&
@@ -351,7 +351,7 @@ export default function BSTVisualization({ speed }: BSTVisualizationProps) {
     const nodes: React.ReactElement[] = [];
     const isInSearchPath = searchPath.includes(node.id);
     const isCurrentSearchNode = currentSearchNode === node.id;
-    const nodeRadius = 22;
+    const nodeRadius = 18;
 
     if (node.x !== undefined && node.y !== undefined) {
       let nodeColor, textColor, strokeColor;
@@ -428,7 +428,7 @@ export default function BSTVisualization({ speed }: BSTVisualizationProps) {
             dominantBaseline="middle"
             className="font-semibold select-none"
             fill={textColor}
-            fontSize="14"
+            fontSize="12"
           >
             {node.value}
           </text>
@@ -479,20 +479,20 @@ export default function BSTVisualization({ speed }: BSTVisualizationProps) {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-2 text-foreground">
+    <div className="h-full flex flex-col p-2 sm:p-0">
+      <div className="mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold mb-2 text-foreground">
           Binary Search Tree
         </h2>
-        <p className="text-muted-foreground">
+        <p className="text-sm sm:text-base text-muted-foreground">
           A BST maintains sorted order: left children are smaller, right
           children are larger than parent.
         </p>
       </div>
 
-      <div className="flex gap-6 flex-1">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 flex-1">
         {/* Controls */}
-        <div className="w-80 space-y-4">
+        <div className="w-full lg:w-80 space-y-3 lg:space-y-4 order-2 lg:order-1 max-h-[50vh] lg:max-h-none overflow-y-auto lg:overflow-visible">
           <div className="space-y-2">
             <label className="text-sm font-medium">Insert/Delete Value</label>
             <div className="flex gap-2">
@@ -664,20 +664,29 @@ export default function BSTVisualization({ speed }: BSTVisualizationProps) {
         </div>
 
         {/* Visualization */}
-        <div className="flex-1 relative overflow-hidden">
+        <div className="flex-1 relative min-h-[300px] lg:min-h-[400px] order-1 lg:order-2 bg-background rounded-lg border overflow-hidden">
           {root ? (
-            <svg className="w-full h-full bg-background">
-              {renderConnections(root)}
-              {renderNodes(root)}
-            </svg>
+            <div className="w-full h-full flex items-center justify-center p-4">
+              <svg 
+                className="w-full h-full max-w-full max-h-full" 
+                viewBox="-250 -40 500 320" 
+                preserveAspectRatio="xMidYMid meet"
+                style={{ minHeight: '250px' }}
+              >
+                <g>
+                  {renderConnections(root)}
+                  {renderNodes(root)}
+                </g>
+              </svg>
+            </div>
           ) : (
             <div className="flex items-center justify-center h-full text-muted-foreground">
               <div className="text-center">
-                <Binary className="h-12 w-12 mx-auto mb-4 opacity-40" />
-                <p className="text-base font-medium mb-2">
+                <Binary className="h-8 w-8 sm:h-12 sm:w-12 mx-auto mb-4 opacity-40" />
+                <p className="text-sm sm:text-base font-medium mb-2">
                   Insert numbers to build your BST
                 </p>
-                <p className="text-sm opacity-60">
+                <p className="text-xs sm:text-sm opacity-60">
                   Left &lt; Parent &lt; Right
                 </p>
               </div>

@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Algorithm Visualizer",
   description: "Interactive algorithm and data structure visualizations",
+  viewport: "width=device-width, initial-scale=1",
 };
 
 export default function RootLayout({

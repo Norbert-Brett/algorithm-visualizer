@@ -47,17 +47,17 @@ export default function QueueVisualization({ speed }: QueueVisualizationProps) {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-2 text-foreground">Queue Visualization</h2>
-        <p className="text-muted-foreground">
+    <div className="h-full flex flex-col p-2 sm:p-0">
+      <div className="mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold mb-2 text-foreground">Queue Visualization</h2>
+        <p className="text-sm sm:text-base text-muted-foreground">
           A queue is a First-In-First-Out (FIFO) data structure. Elements are added at the rear and removed from the front.
         </p>
       </div>
 
-      <div className="flex gap-6 flex-1">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 flex-1">
         {/* Controls */}
-        <div className="w-80 space-y-4">
+        <div className="w-full lg:w-80 space-y-4 order-2 lg:order-1">
           <div className="space-y-2">
             <label className="text-sm font-medium">Enqueue Element</label>
             <div className="flex gap-2">
@@ -107,10 +107,10 @@ export default function QueueVisualization({ speed }: QueueVisualizationProps) {
         </div>
 
         {/* Visualization */}
-        <div className="flex-1 flex items-center justify-center">
+        <div className="flex-1 flex items-center justify-center min-h-[200px] order-1 lg:order-2">
           <div className="relative">
             {/* Queue container */}
-            <div className="flex items-center gap-2 min-w-[200px] p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-muted/50">
+            <div className="flex items-center gap-1 sm:gap-2 min-w-[200px] p-2 sm:p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-muted/50 overflow-x-auto">
               <AnimatePresence mode="popLayout">
                 {queue.map((item, index) => (
                   <motion.div
@@ -130,10 +130,10 @@ export default function QueueVisualization({ speed }: QueueVisualizationProps) {
                     }}
                     layout
                     className={`
-                      w-16 h-16 bg-primary text-primary-foreground 
+                      w-12 h-12 sm:w-16 sm:h-16 bg-primary text-primary-foreground 
                       rounded-lg flex items-center justify-center
-                      font-mono font-medium text-sm
-                      border-2 border-primary/20 shadow-md
+                      font-mono font-medium text-xs sm:text-sm
+                      border-2 border-primary/20 shadow-md flex-shrink-0
                       ${index === 0 ? 'ring-2 ring-ring ring-offset-2' : ''}
                       ${index === queue.length - 1 && queue.length > 1 ? 'ring-2 ring-accent ring-offset-2' : ''}
                     `}

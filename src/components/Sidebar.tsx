@@ -24,6 +24,7 @@ import { Algorithm } from "./AlgorithmVisualizer";
 interface SidebarProps {
   selectedAlgorithm: Algorithm;
   onAlgorithmSelect: (algorithm: Algorithm) => void;
+  onClose?: () => void;
 }
 
 const algorithms = [
@@ -176,6 +177,7 @@ const algorithms = [
 export default function Sidebar({
   selectedAlgorithm,
   onAlgorithmSelect,
+  onClose,
 }: SidebarProps) {
   // Count total algorithms and implemented ones
   const totalAlgorithms = algorithms.reduce((sum, category) => sum + category.items.length, 0);
@@ -186,12 +188,24 @@ export default function Sidebar({
   }, 0);
 
   return (
-    <aside className="w-80 border-r bg-sidebar p-4 overflow-y-auto">
+    <aside className="w-80 h-full border-r bg-sidebar p-4 overflow-y-auto max-h-screen">
       <div className="space-y-6">
         <div>
-          <h2 className="text-lg font-semibold mb-2 text-sidebar-foreground">
-            Algorithm Visualizer
-          </h2>
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-lg font-semibold text-sidebar-foreground">
+              Algorithm Visualizer
+            </h2>
+            {onClose && (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={onClose}
+                className="lg:hidden"
+              >
+                ✕
+              </Button>
+            )}
+          </div>
           <p className="text-xs text-muted-foreground mb-4">
             {implementedAlgorithms} of {totalAlgorithms} algorithms implemented
           </p>
@@ -204,7 +218,7 @@ export default function Sidebar({
               return (
                 <Card
                   key={category.category}
-                  className="p-4 hover:shadow-md transition-shadow"
+                  className="p-3 sm:p-4 hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="font-medium text-sm text-muted-foreground uppercase tracking-wide">
@@ -227,25 +241,25 @@ export default function Sidebar({
                               ? "default"
                               : "ghost"
                           }
-                          className={`w-full justify-start h-auto p-3 ${
+                          className={`w-full justify-start h-auto p-2 sm:p-3 ${
                             !isImplemented ? "opacity-60" : ""
                           }`}
                           onClick={() => onAlgorithmSelect(algorithm.id)}
                         >
-                          <div className="flex items-start gap-3">
-                            <Icon className="h-5 w-5 mt-0.5 flex-shrink-0" />
-                            <div className="text-left flex-1">
+                          <div className="flex items-start gap-2 sm:gap-3">
+                            <Icon className="h-4 w-4 sm:h-5 sm:w-5 mt-0.5 flex-shrink-0" />
+                            <div className="text-left flex-1 min-w-0">
                               <div className="flex items-center gap-2">
-                                <span className="font-medium">
+                                <span className="font-medium text-sm sm:text-base truncate">
                                   {algorithm.name}
                                 </span>
                                 {!isImplemented && (
-                                  <span className="text-xs bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded">
+                                  <span className="text-[10px] sm:text-xs bg-orange-100 text-orange-700 px-1 sm:px-1.5 py-0.5 rounded flex-shrink-0">
                                     Soon
                                   </span>
                                 )}
                               </div>
-                              <div className="text-xs text-muted-foreground">
+                              <div className="text-[10px] sm:text-xs text-muted-foreground">
                                 {algorithm.description}
                               </div>
                             </div>

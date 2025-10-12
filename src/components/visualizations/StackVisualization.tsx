@@ -47,17 +47,17 @@ export default function StackVisualization({ speed }: StackVisualizationProps) {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-2 text-foreground">Stack Visualization</h2>
-        <p className="text-muted-foreground">
+    <div className="h-full flex flex-col p-2 sm:p-0">
+      <div className="mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold mb-2 text-foreground">Stack Visualization</h2>
+        <p className="text-sm sm:text-base text-muted-foreground">
           A stack is a Last-In-First-Out (LIFO) data structure. Elements are added and removed from the top.
         </p>
       </div>
 
-      <div className="flex gap-6 flex-1">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 flex-1">
         {/* Controls */}
-        <div className="w-80 space-y-4">
+        <div className="w-full lg:w-80 space-y-4 order-2 lg:order-1">
           <div className="space-y-2">
             <label className="text-sm font-medium">Push Element</label>
             <div className="flex gap-2">
@@ -101,10 +101,10 @@ export default function StackVisualization({ speed }: StackVisualizationProps) {
         </div>
 
         {/* Visualization */}
-        <div className="flex-1 flex items-end justify-center pb-20">
+        <div className="flex-1 flex items-end justify-center pb-10 lg:pb-20 min-h-[300px] order-1 lg:order-2">
           <div className="relative">
             {/* Stack base */}
-            <div className="w-32 h-4 bg-muted rounded-b-lg mb-2" />
+            <div className="w-24 sm:w-32 h-3 sm:h-4 bg-muted rounded-b-lg mb-2" />
             
             {/* Stack items */}
             <div className="flex flex-col-reverse gap-1">
@@ -126,9 +126,9 @@ export default function StackVisualization({ speed }: StackVisualizationProps) {
                       transition: { duration: 0.2 / speed }
                     }}
                     className={`
-                      w-32 h-12 bg-primary text-primary-foreground 
+                      w-24 sm:w-32 h-10 sm:h-12 bg-primary text-primary-foreground 
                       rounded-lg flex items-center justify-center
-                      font-mono font-medium text-lg
+                      font-mono font-medium text-sm sm:text-lg
                       border-2 border-primary/20 shadow-md
                       ${index === stack.length - 1 ? 'ring-2 ring-ring ring-offset-2' : ''}
                     `}
