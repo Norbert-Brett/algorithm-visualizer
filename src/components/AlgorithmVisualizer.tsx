@@ -8,7 +8,32 @@ import Sidebar from "./Sidebar";
 import VisualizationArea from "./VisualizationArea";
 import ControlPanel from "./ControlPanel";
 
-export type Algorithm = "stack" | "queue" | "bubble-sort" | "selection-sort" | "merge-sort" | "heap-sort" | "radix-sort";
+export type Algorithm = 
+  // Data Structures
+  | "stack" 
+  | "queue" 
+  | "bst" 
+  | "btree"
+  // Sorting Algorithms
+  | "bubble-sort" 
+  | "selection-sort" 
+  | "merge-sort" 
+  | "heap-sort" 
+  | "radix-sort"
+  // Search Algorithms
+  | "linear-search"
+  | "binary-search"
+  | "dfs"
+  | "bfs"
+  // Graph Algorithms
+  | "dijkstra"
+  | "a-star"
+  | "kruskal"
+  // Dynamic Programming
+  | "fibonacci"
+  | "knapsack"
+  // Miscellaneous
+  | "shuffle";
 
 export default function AlgorithmVisualizer() {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<Algorithm>("stack");
