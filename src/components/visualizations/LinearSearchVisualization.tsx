@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { RotateCcw, Search, Shuffle } from "lucide-react";
 
 interface LinearSearchVisualizationProps {
-  isPlaying: boolean;
   speed: number;
 }
 

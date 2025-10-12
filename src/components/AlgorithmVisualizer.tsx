@@ -9,31 +9,74 @@ import VisualizationArea from "./VisualizationArea";
 import ControlPanel from "./ControlPanel";
 
 export type Algorithm = 
-  // Data Structures
+  // Basic Data Structures
   | "stack" 
-  | "queue" 
+  | "queue"
+  // Tree Data Structures
   | "bst" 
+  | "avl-tree"
+  | "red-black-tree"
+  | "splay-tree"
   | "btree"
-  // Sorting Algorithms
-  | "bubble-sort" 
-  | "selection-sort" 
-  | "merge-sort" 
-  | "heap-sort" 
-  | "radix-sort"
+  | "b-plus-tree"
+  | "trie"
+  | "radix-tree"
+  | "ternary-search-tree"
+  // Hash Tables
+  | "open-hash-table"
+  | "closed-hash-table"
+  | "bucket-hash-table"
+  // Heap Data Structures
+  | "heap"
+  | "binomial-queue"
+  | "fibonacci-heap"
+  | "leftist-heap"
+  | "skew-heap"
   // Search Algorithms
   | "linear-search"
   | "binary-search"
+  | "binary-search-sorted"
+  // Sorting Algorithms
+  | "bubble-sort" 
+  | "selection-sort"
+  | "insertion-sort"
+  | "shell-sort"
+  | "merge-sort"
+  | "quick-sort"
+  | "heap-sort" 
+  | "bucket-sort"
+  | "counting-sort"
+  | "radix-sort"
+  // Graph Algorithms
   | "dfs"
   | "bfs"
-  // Graph Algorithms
+  | "connected-components"
   | "dijkstra"
-  | "a-star"
+  | "prim-mst"
   | "kruskal"
+  | "topological-sort-indegree"
+  | "topological-sort-dfs"
+  | "floyd-warshall"
   // Dynamic Programming
   | "fibonacci"
+  | "making-change"
+  | "longest-common-subsequence"
   | "knapsack"
+  // Recursion & Backtracking
+  | "recursion-factorial"
+  | "string-reversal"
+  | "n-queens"
+  // Geometric Algorithms
+  | "2d-rotation-scale"
+  | "2d-rotation-translation"
+  | "2d-coordinate-systems"
+  | "3d-rotation-scale"
+  | "3d-coordinate-systems"
+  // Advanced Data Structures
+  | "disjoint-sets"
   // Miscellaneous
-  | "shuffle";
+  | "shuffle"
+  | "indexing";
 
 export default function AlgorithmVisualizer() {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<Algorithm>("stack");

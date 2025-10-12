@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Plus, Minus, Search, RotateCcw, Network } from "lucide-react";
 
 interface BTreeVisualizationProps {
-  isPlaying: boolean;
   speed: number;
 }
 

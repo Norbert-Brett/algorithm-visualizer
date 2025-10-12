@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Plus, Minus, Search, RotateCcw, Binary } from "lucide-react";
 
 interface BSTVisualizationProps {
-  isPlaying: boolean;
   speed: number;
 }
 

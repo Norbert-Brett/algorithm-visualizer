@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Search, RotateCcw, Shuffle } from "lucide-react";
 
 interface BFSVisualizationProps {
-  isPlaying: boolean;
   speed: number;
 }
 

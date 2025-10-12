@@ -18,6 +18,7 @@ import {
   Grid3X3,
   MapPin,
   Cpu,
+  RotateCcw,
 } from "lucide-react";
 import { Algorithm } from "./AlgorithmVisualizer";
 
@@ -29,7 +30,7 @@ interface SidebarProps {
 
 const algorithms = [
   {
-    category: "Data Structures",
+    category: "Basic Data Structures",
     items: [
       {
         id: "stack" as Algorithm,
@@ -43,6 +44,11 @@ const algorithms = [
         icon: ArrowRight,
         description: "FIFO data structure",
       },
+    ],
+  },
+  {
+    category: "Tree Data Structures",
+    items: [
       {
         id: "bst" as Algorithm,
         name: "Binary Search Tree",
@@ -50,45 +56,110 @@ const algorithms = [
         description: "Ordered binary tree structure",
       },
       {
+        id: "avl-tree" as Algorithm,
+        name: "AVL Tree",
+        icon: Binary,
+        description: "Self-balancing BST",
+      },
+      {
+        id: "red-black-tree" as Algorithm,
+        name: "Red-Black Tree",
+        icon: Binary,
+        description: "Balanced binary search tree",
+      },
+      {
+        id: "splay-tree" as Algorithm,
+        name: "Splay Tree",
+        icon: Binary,
+        description: "Self-adjusting BST",
+      },
+      {
         id: "btree" as Algorithm,
         name: "B-Tree",
         icon: Network,
         description: "Multi-way balanced tree",
       },
+      {
+        id: "b-plus-tree" as Algorithm,
+        name: "B+ Tree",
+        icon: Network,
+        description: "B-tree variant for databases",
+      },
+      {
+        id: "trie" as Algorithm,
+        name: "Trie (Prefix Tree)",
+        icon: Network,
+        description: "26-ary tree for strings",
+      },
+      {
+        id: "radix-tree" as Algorithm,
+        name: "Radix Tree",
+        icon: Network,
+        description: "Compact trie structure",
+      },
+      {
+        id: "ternary-search-tree" as Algorithm,
+        name: "Ternary Search Tree",
+        icon: Network,
+        description: "Trie with BST children",
+      },
     ],
   },
   {
-    category: "Sorting Algorithms",
+    category: "Hash Tables",
     items: [
       {
-        id: "bubble-sort" as Algorithm,
-        name: "Bubble Sort",
-        icon: BarChart3,
-        description: "Simple comparison sort",
-      },
-      {
-        id: "selection-sort" as Algorithm,
-        name: "Selection Sort",
-        icon: ArrowUpDown,
-        description: "In-place comparison sort",
-      },
-      {
-        id: "merge-sort" as Algorithm,
-        name: "Merge Sort",
-        icon: GitMerge,
-        description: "Divide and conquer sort",
-      },
-      {
-        id: "heap-sort" as Algorithm,
-        name: "Heap Sort",
-        icon: TreePine,
-        description: "Heap-based sorting",
-      },
-      {
-        id: "radix-sort" as Algorithm,
-        name: "Radix Sort",
+        id: "open-hash-table" as Algorithm,
+        name: "Open Hash Table",
         icon: Hash,
-        description: "Non-comparison digit sort",
+        description: "Closed addressing (chaining)",
+      },
+      {
+        id: "closed-hash-table" as Algorithm,
+        name: "Closed Hash Table",
+        icon: Hash,
+        description: "Open addressing (probing)",
+      },
+      {
+        id: "bucket-hash-table" as Algorithm,
+        name: "Bucket Hash Table",
+        icon: Hash,
+        description: "Hash table with buckets",
+      },
+    ],
+  },
+  {
+    category: "Heap Data Structures",
+    items: [
+      {
+        id: "heap" as Algorithm,
+        name: "Binary Heap",
+        icon: TreePine,
+        description: "Complete binary tree heap",
+      },
+      {
+        id: "binomial-queue" as Algorithm,
+        name: "Binomial Queue",
+        icon: TreePine,
+        description: "Collection of binomial trees",
+      },
+      {
+        id: "fibonacci-heap" as Algorithm,
+        name: "Fibonacci Heap",
+        icon: TreePine,
+        description: "Advanced heap structure",
+      },
+      {
+        id: "leftist-heap" as Algorithm,
+        name: "Leftist Heap",
+        icon: TreePine,
+        description: "Mergeable heap structure",
+      },
+      {
+        id: "skew-heap" as Algorithm,
+        name: "Skew Heap",
+        icon: TreePine,
+        description: "Self-adjusting heap",
       },
     ],
   },
@@ -108,6 +179,82 @@ const algorithms = [
         description: "Divide and conquer search",
       },
       {
+        id: "binary-search-sorted" as Algorithm,
+        name: "Binary Search (Sorted)",
+        icon: Target,
+        description: "Search in sorted list",
+      },
+    ],
+  },
+  {
+    category: "Sorting Algorithms",
+    items: [
+      {
+        id: "bubble-sort" as Algorithm,
+        name: "Bubble Sort",
+        icon: BarChart3,
+        description: "Simple comparison sort",
+      },
+      {
+        id: "selection-sort" as Algorithm,
+        name: "Selection Sort",
+        icon: ArrowUpDown,
+        description: "In-place comparison sort",
+      },
+      {
+        id: "insertion-sort" as Algorithm,
+        name: "Insertion Sort",
+        icon: ArrowUpDown,
+        description: "Build sorted array incrementally",
+      },
+      {
+        id: "shell-sort" as Algorithm,
+        name: "Shell Sort",
+        icon: ArrowUpDown,
+        description: "Generalized insertion sort",
+      },
+      {
+        id: "merge-sort" as Algorithm,
+        name: "Merge Sort",
+        icon: GitMerge,
+        description: "Divide and conquer sort",
+      },
+      {
+        id: "quick-sort" as Algorithm,
+        name: "Quick Sort",
+        icon: Zap,
+        description: "Efficient divide-conquer sort",
+      },
+      {
+        id: "heap-sort" as Algorithm,
+        name: "Heap Sort",
+        icon: TreePine,
+        description: "Heap-based sorting",
+      },
+      {
+        id: "bucket-sort" as Algorithm,
+        name: "Bucket Sort",
+        icon: Hash,
+        description: "Distribution sort algorithm",
+      },
+      {
+        id: "counting-sort" as Algorithm,
+        name: "Counting Sort",
+        icon: Hash,
+        description: "Integer sorting algorithm",
+      },
+      {
+        id: "radix-sort" as Algorithm,
+        name: "Radix Sort",
+        icon: Hash,
+        description: "Non-comparison digit sort",
+      },
+    ],
+  },
+  {
+    category: "Graph Algorithms",
+    items: [
+      {
         id: "dfs" as Algorithm,
         name: "Depth-First Search",
         icon: Route,
@@ -119,11 +266,12 @@ const algorithms = [
         icon: Network,
         description: "Level-order graph traversal",
       },
-    ],
-  },
-  {
-    category: "Graph Algorithms",
-    items: [
+      {
+        id: "connected-components" as Algorithm,
+        name: "Connected Components",
+        icon: Network,
+        description: "Find graph components",
+      },
       {
         id: "dijkstra" as Algorithm,
         name: "Dijkstra's Algorithm",
@@ -131,16 +279,34 @@ const algorithms = [
         description: "Shortest path algorithm",
       },
       {
-        id: "a-star" as Algorithm,
-        name: "A* Search",
-        icon: Zap,
-        description: "Heuristic pathfinding",
+        id: "prim-mst" as Algorithm,
+        name: "Prim's MST",
+        icon: Network,
+        description: "Minimum spanning tree",
       },
       {
         id: "kruskal" as Algorithm,
         name: "Kruskal's Algorithm",
         icon: Network,
         description: "Minimum spanning tree",
+      },
+      {
+        id: "topological-sort-indegree" as Algorithm,
+        name: "Topological Sort (Indegree)",
+        icon: Route,
+        description: "Using indegree array",
+      },
+      {
+        id: "topological-sort-dfs" as Algorithm,
+        name: "Topological Sort (DFS)",
+        icon: Route,
+        description: "Using depth-first search",
+      },
+      {
+        id: "floyd-warshall" as Algorithm,
+        name: "Floyd-Warshall",
+        icon: MapPin,
+        description: "All pairs shortest paths",
       },
     ],
   },
@@ -154,10 +320,91 @@ const algorithms = [
         description: "Classic DP problem",
       },
       {
+        id: "making-change" as Algorithm,
+        name: "Making Change",
+        icon: Cpu,
+        description: "Coin change problem",
+      },
+      {
+        id: "longest-common-subsequence" as Algorithm,
+        name: "Longest Common Subsequence",
+        icon: Cpu,
+        description: "LCS dynamic programming",
+      },
+      {
         id: "knapsack" as Algorithm,
         name: "0/1 Knapsack",
         icon: Grid3X3,
         description: "Optimization problem",
+      },
+    ],
+  },
+  {
+    category: "Recursion & Backtracking",
+    items: [
+      {
+        id: "recursion-factorial" as Algorithm,
+        name: "Factorial (Recursive)",
+        icon: Cpu,
+        description: "Recursive factorial calculation",
+      },
+      {
+        id: "string-reversal" as Algorithm,
+        name: "String Reversal",
+        icon: ArrowUpDown,
+        description: "Reverse string recursively",
+      },
+      {
+        id: "n-queens" as Algorithm,
+        name: "N-Queens Problem",
+        icon: Grid3X3,
+        description: "Backtracking chess problem",
+      },
+    ],
+  },
+  {
+    category: "Geometric Algorithms",
+    items: [
+      {
+        id: "2d-rotation-scale" as Algorithm,
+        name: "2D Rotation & Scale",
+        icon: RotateCcw,
+        description: "2D transformation matrices",
+      },
+      {
+        id: "2d-rotation-translation" as Algorithm,
+        name: "2D Rotation & Translation",
+        icon: RotateCcw,
+        description: "2D transformation matrices",
+      },
+      {
+        id: "2d-coordinate-systems" as Algorithm,
+        name: "2D Coordinate Systems",
+        icon: Grid3X3,
+        description: "Changing coordinate systems",
+      },
+      {
+        id: "3d-rotation-scale" as Algorithm,
+        name: "3D Rotation & Scale",
+        icon: RotateCcw,
+        description: "3D transformation matrices",
+      },
+      {
+        id: "3d-coordinate-systems" as Algorithm,
+        name: "3D Coordinate Systems",
+        icon: Grid3X3,
+        description: "3D coordinate transformations",
+      },
+    ],
+  },
+  {
+    category: "Advanced Data Structures",
+    items: [
+      {
+        id: "disjoint-sets" as Algorithm,
+        name: "Disjoint Sets (Union-Find)",
+        icon: Network,
+        description: "Union-find data structure",
       },
     ],
   },
@@ -169,6 +416,12 @@ const algorithms = [
         name: "Fisher-Yates Shuffle",
         icon: Shuffle,
         description: "Array randomization",
+      },
+      {
+        id: "indexing" as Algorithm,
+        name: "Indexing Techniques",
+        icon: Hash,
+        description: "Data indexing methods",
       },
     ],
   },

@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { RotateCcw, Search, Shuffle } from "lucide-react";
 
 interface DFSVisualizationProps {
-  isPlaying: boolean;
   speed: number;
 }
 
