@@ -12,6 +12,10 @@ import SelectionSortVisualization from "./visualizations/SelectionSortVisualizat
 import MergeSortVisualization from "./visualizations/MergeSortVisualization";
 import HeapSortVisualization from "./visualizations/HeapSortVisualization";
 import RadixSortVisualization from "./visualizations/RadixSortVisualization";
+import LinearSearchVisualization from "./visualizations/LinearSearchVisualization";
+import BinarySearchVisualization from "./visualizations/BinarySearchVisualization";
+import DFSVisualization from "./visualizations/DFSVisualization";
+import BFSVisualization from "./visualizations/BFSVisualization";
 
 interface VisualizationAreaProps {
   algorithm: Algorithm;
@@ -61,13 +65,13 @@ export default function VisualizationArea({ algorithm, isPlaying, speed, onToggl
       
       // Search Algorithms
       case "linear-search":
-        return <ComingSoonVisualization algorithmName="Linear Search" />;
+        return <LinearSearchVisualization isPlaying={isPlaying} speed={speed} />;
       case "binary-search":
-        return <ComingSoonVisualization algorithmName="Binary Search" />;
+        return <BinarySearchVisualization isPlaying={isPlaying} speed={speed} />;
       case "dfs":
-        return <ComingSoonVisualization algorithmName="Depth-First Search" />;
+        return <DFSVisualization isPlaying={isPlaying} speed={speed} />;
       case "bfs":
-        return <ComingSoonVisualization algorithmName="Breadth-First Search" />;
+        return <BFSVisualization isPlaying={isPlaying} speed={speed} />;
       
       // Graph Algorithms
       case "dijkstra":

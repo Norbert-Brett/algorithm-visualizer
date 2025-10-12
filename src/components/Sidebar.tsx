@@ -1,14 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { 
-  Layers, 
-  ArrowRight, 
-  Binary, 
-  Network, 
-  BarChart3, 
-  ArrowUpDown, 
-  GitMerge, 
-  TreePine, 
+import {
+  Layers,
+  ArrowRight,
+  Binary,
+  Network,
+  BarChart3,
+  ArrowUpDown,
+  GitMerge,
+  TreePine,
   Hash,
   Search,
   Route,
@@ -17,7 +17,7 @@ import {
   Shuffle,
   Grid3X3,
   MapPin,
-  Cpu
+  Cpu,
 } from "lucide-react";
 import { Algorithm } from "./AlgorithmVisualizer";
 
@@ -180,15 +180,35 @@ export default function Sidebar({
   onClose,
 }: SidebarProps) {
   // Count total algorithms and implemented ones
-  const totalAlgorithms = algorithms.reduce((sum, category) => sum + category.items.length, 0);
+  const totalAlgorithms = algorithms.reduce(
+    (sum, category) => sum + category.items.length,
+    0
+  );
   const implementedAlgorithms = algorithms.reduce((sum, category) => {
-    return sum + category.items.filter(item => 
-      ["stack", "queue", "bst", "btree", "bubble-sort", "selection-sort", "merge-sort", "heap-sort", "radix-sort"].includes(item.id)
-    ).length;
+    return (
+      sum +
+      category.items.filter((item) =>
+        [
+          "stack",
+          "queue",
+          "bst",
+          "btree",
+          "bubble-sort",
+          "selection-sort",
+          "merge-sort",
+          "heap-sort",
+          "radix-sort",
+          "linear-search",
+          "binary-search",
+          "dfs",
+          "bfs",
+        ].includes(item.id)
+      ).length
+    );
   }, 0);
 
   return (
-    <aside className="w-80 h-full border-r bg-sidebar p-4 overflow-y-auto max-h-screen">
+    <aside className="w-80 h-fit border-r bg-sidebar p-4 overflow-y-auto max-h-screen">
       <div className="space-y-6">
         <div>
           <div className="flex items-center justify-between mb-2">
@@ -196,9 +216,9 @@ export default function Sidebar({
               Algorithm Visualizer
             </h2>
             {onClose && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={onClose}
                 className="lg:hidden"
               >
@@ -211,10 +231,24 @@ export default function Sidebar({
           </p>
           <div className="space-y-4">
             {algorithms.map((category) => {
-              const categoryImplemented = category.items.filter(item => 
-                ["stack", "queue", "bst", "btree", "bubble-sort", "selection-sort", "merge-sort", "heap-sort", "radix-sort"].includes(item.id)
+              const categoryImplemented = category.items.filter((item) =>
+                [
+                  "stack",
+                  "queue",
+                  "bst",
+                  "btree",
+                  "bubble-sort",
+                  "selection-sort",
+                  "merge-sort",
+                  "heap-sort",
+                  "radix-sort",
+                  "linear-search",
+                  "binary-search",
+                  "dfs",
+                  "bfs",
+                ].includes(item.id)
               ).length;
-              
+
               return (
                 <Card
                   key={category.category}
@@ -231,8 +265,22 @@ export default function Sidebar({
                   <div className="space-y-2">
                     {category.items.map((algorithm) => {
                       const Icon = algorithm.icon;
-                      const isImplemented = ["stack", "queue", "bst", "btree", "bubble-sort", "selection-sort", "merge-sort", "heap-sort", "radix-sort"].includes(algorithm.id);
-                      
+                      const isImplemented = [
+                        "stack",
+                        "queue",
+                        "bst",
+                        "btree",
+                        "bubble-sort",
+                        "selection-sort",
+                        "merge-sort",
+                        "heap-sort",
+                        "radix-sort",
+                        "linear-search",
+                        "binary-search",
+                        "dfs",
+                        "bfs",
+                      ].includes(algorithm.id);
+
                       return (
                         <Button
                           key={algorithm.id}
