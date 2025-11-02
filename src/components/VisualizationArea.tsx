@@ -19,6 +19,8 @@ import LinearSearchVisualization from "./visualizations/LinearSearchVisualizatio
 import BinarySearchVisualization from "./visualizations/BinarySearchVisualization";
 import DFSVisualization from "./visualizations/DFSVisualization";
 import BFSVisualization from "./visualizations/BFSVisualization";
+import OpenHashTableVisualization from "./visualizations/OpenHashTableVisualization";
+import BinaryHeapVisualization from "./visualizations/BinaryHeapVisualization";
 
 interface VisualizationAreaProps {
   algorithm: Algorithm;
@@ -105,7 +107,7 @@ export default function VisualizationArea({
 
       // Hash Tables
       case "open-hash-table":
-        return <ComingSoonVisualization algorithmName="Open Hash Table" />;
+        return <OpenHashTableVisualization speed={speed} />;
       case "closed-hash-table":
         return <ComingSoonVisualization algorithmName="Closed Hash Table" />;
       case "bucket-hash-table":
@@ -113,7 +115,7 @@ export default function VisualizationArea({
 
       // Heap Data Structures
       case "heap":
-        return <ComingSoonVisualization algorithmName="Binary Heap" />;
+        return <BinaryHeapVisualization speed={speed} />;
       case "binomial-queue":
         return <ComingSoonVisualization algorithmName="Binomial Queue" />;
       case "fibonacci-heap":

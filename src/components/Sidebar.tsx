@@ -436,6 +436,8 @@ const implementedAlgorithmIds = [
   "red-black-tree",
   "splay-tree",
   "btree",
+  "open-hash-table",
+  "heap",
   "bubble-sort",
   "selection-sort",
   "merge-sort",
