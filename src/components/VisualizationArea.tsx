@@ -7,6 +7,9 @@ import StackVisualization from "./visualizations/StackVisualization";
 import QueueVisualization from "./visualizations/QueueVisualization";
 import BSTVisualization from "./visualizations/BSTVisualization";
 import BTreeVisualization from "./visualizations/BTreeVisualization";
+import AVLTreeVisualization from "./visualizations/AVLTreeVisualization";
+import RedBlackTreeVisualization from "./visualizations/RedBlackTreeVisualization";
+import SplayTreeVisualization from "./visualizations/SplayTreeVisualization";
 import BubbleSortVisualization from "./visualizations/BubbleSortVisualization";
 import SelectionSortVisualization from "./visualizations/SelectionSortVisualization";
 import MergeSortVisualization from "./visualizations/MergeSortVisualization";
@@ -86,11 +89,11 @@ export default function VisualizationArea({
 
       // Tree Data Structures
       case "avl-tree":
-        return <ComingSoonVisualization algorithmName="AVL Tree" />;
+        return <AVLTreeVisualization speed={speed} />;
       case "red-black-tree":
-        return <ComingSoonVisualization algorithmName="Red-Black Tree" />;
+        return <RedBlackTreeVisualization speed={speed} />;
       case "splay-tree":
-        return <ComingSoonVisualization algorithmName="Splay Tree" />;
+        return <SplayTreeVisualization speed={speed} />;
       case "b-plus-tree":
         return <ComingSoonVisualization algorithmName="B+ Tree" />;
       case "trie":

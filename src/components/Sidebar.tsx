@@ -427,6 +427,26 @@ const algorithms = [
   },
 ];
 
+// List of implemented algorithms
+const implementedAlgorithmIds = [
+  "stack",
+  "queue",
+  "bst",
+  "avl-tree",
+  "red-black-tree",
+  "splay-tree",
+  "btree",
+  "bubble-sort",
+  "selection-sort",
+  "merge-sort",
+  "heap-sort",
+  "radix-sort",
+  "linear-search",
+  "binary-search",
+  "dfs",
+  "bfs",
+];
+
 export default function Sidebar({
   selectedAlgorithm,
   onAlgorithmSelect,
@@ -441,21 +461,7 @@ export default function Sidebar({
     return (
       sum +
       category.items.filter((item) =>
-        [
-          "stack",
-          "queue",
-          "bst",
-          "btree",
-          "bubble-sort",
-          "selection-sort",
-          "merge-sort",
-          "heap-sort",
-          "radix-sort",
-          "linear-search",
-          "binary-search",
-          "dfs",
-          "bfs",
-        ].includes(item.id)
+        implementedAlgorithmIds.includes(item.id)
       ).length
     );
   }, 0);
@@ -485,21 +491,7 @@ export default function Sidebar({
           <div className="space-y-4">
             {algorithms.map((category) => {
               const categoryImplemented = category.items.filter((item) =>
-                [
-                  "stack",
-                  "queue",
-                  "bst",
-                  "btree",
-                  "bubble-sort",
-                  "selection-sort",
-                  "merge-sort",
-                  "heap-sort",
-                  "radix-sort",
-                  "linear-search",
-                  "binary-search",
-                  "dfs",
-                  "bfs",
-                ].includes(item.id)
+                implementedAlgorithmIds.includes(item.id)
               ).length;
 
               return (
@@ -518,21 +510,7 @@ export default function Sidebar({
                   <div className="space-y-2">
                     {category.items.map((algorithm) => {
                       const Icon = algorithm.icon;
-                      const isImplemented = [
-                        "stack",
-                        "queue",
-                        "bst",
-                        "btree",
-                        "bubble-sort",
-                        "selection-sort",
-                        "merge-sort",
-                        "heap-sort",
-                        "radix-sort",
-                        "linear-search",
-                        "binary-search",
-                        "dfs",
-                        "bfs",
-                      ].includes(algorithm.id);
+                      const isImplemented = implementedAlgorithmIds.includes(algorithm.id);
 
                       return (
                         <Button
