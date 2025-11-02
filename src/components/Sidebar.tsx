@@ -447,6 +447,7 @@ const implementedAlgorithmIds = [
   "binary-search",
   "dfs",
   "bfs",
+  "dijkstra",
 ];
 
 export default function Sidebar({

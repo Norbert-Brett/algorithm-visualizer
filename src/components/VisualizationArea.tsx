@@ -19,6 +19,7 @@ import LinearSearchVisualization from "./visualizations/LinearSearchVisualizatio
 import BinarySearchVisualization from "./visualizations/BinarySearchVisualization";
 import DFSVisualization from "./visualizations/DFSVisualization";
 import BFSVisualization from "./visualizations/BFSVisualization";
+import DijkstraVisualization from "./visualizations/DijkstraVisualization";
 import OpenHashTableVisualization from "./visualizations/OpenHashTableVisualization";
 import BinaryHeapVisualization from "./visualizations/BinaryHeapVisualization";
 
@@ -147,7 +148,7 @@ export default function VisualizationArea({
       case "connected-components":
         return <ComingSoonVisualization algorithmName="Connected Components" />;
       case "dijkstra":
-        return <ComingSoonVisualization algorithmName="Dijkstra's Algorithm" />;
+        return <DijkstraVisualization speed={speed} />;
       case "prim-mst":
         return <ComingSoonVisualization algorithmName="Prim's MST" />;
       case "kruskal":
