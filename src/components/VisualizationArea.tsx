@@ -24,6 +24,10 @@ import OpenHashTableVisualization from "./visualizations/OpenHashTableVisualizat
 import ClosedHashTableVisualization from "./visualizations/ClosedHashTableVisualization";
 import BucketHashTableVisualization from "./visualizations/BucketHashTableVisualization";
 import BinaryHeapVisualization from "./visualizations/BinaryHeapVisualization";
+import BinomialQueueVisualization from "./visualizations/BinomialQueueVisualization";
+import FibonacciHeapVisualization from "./visualizations/FibonacciHeapVisualization";
+import LeftistHeapVisualization from "./visualizations/LeftistHeapVisualization";
+import SkewHeapVisualization from "./visualizations/SkewHeapVisualization";
 
 interface VisualizationAreaProps {
   algorithm: Algorithm;
@@ -120,13 +124,13 @@ export default function VisualizationArea({
       case "heap":
         return <BinaryHeapVisualization speed={speed} />;
       case "binomial-queue":
-        return <ComingSoonVisualization algorithmName="Binomial Queue" />;
+        return <BinomialQueueVisualization speed={speed} />;
       case "fibonacci-heap":
-        return <ComingSoonVisualization algorithmName="Fibonacci Heap" />;
+        return <FibonacciHeapVisualization speed={speed} />;
       case "leftist-heap":
-        return <ComingSoonVisualization algorithmName="Leftist Heap" />;
+        return <LeftistHeapVisualization speed={speed} />;
       case "skew-heap":
-        return <ComingSoonVisualization algorithmName="Skew Heap" />;
+        return <SkewHeapVisualization speed={speed} />;
 
       // Additional Search Algorithms
       case "binary-search-sorted":
