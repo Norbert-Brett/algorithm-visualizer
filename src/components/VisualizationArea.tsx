@@ -21,6 +21,8 @@ import DFSVisualization from "./visualizations/DFSVisualization";
 import BFSVisualization from "./visualizations/BFSVisualization";
 import DijkstraVisualization from "./visualizations/DijkstraVisualization";
 import OpenHashTableVisualization from "./visualizations/OpenHashTableVisualization";
+import ClosedHashTableVisualization from "./visualizations/ClosedHashTableVisualization";
+import BucketHashTableVisualization from "./visualizations/BucketHashTableVisualization";
 import BinaryHeapVisualization from "./visualizations/BinaryHeapVisualization";
 
 interface VisualizationAreaProps {
@@ -110,9 +112,9 @@ export default function VisualizationArea({
       case "open-hash-table":
         return <OpenHashTableVisualization speed={speed} />;
       case "closed-hash-table":
-        return <ComingSoonVisualization algorithmName="Closed Hash Table" />;
+        return <ClosedHashTableVisualization speed={speed} />;
       case "bucket-hash-table":
-        return <ComingSoonVisualization algorithmName="Bucket Hash Table" />;
+        return <BucketHashTableVisualization speed={speed} />;
 
       // Heap Data Structures
       case "heap":
