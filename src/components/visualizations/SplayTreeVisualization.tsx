@@ -543,7 +543,7 @@ export default function SplayTreeVisualization({ speed }: SplayTreeVisualization
       return { minX: 0, maxX: 0, minY: 0, maxY: 0 };
     }
 
-    let bounds = { minX: node.x, maxX: node.x, minY: node.y, maxY: node.y };
+    const bounds = { minX: node.x, maxX: node.x, minY: node.y, maxY: node.y };
 
     if (node.left) {
       const leftBounds = getTreeBounds(node.left);

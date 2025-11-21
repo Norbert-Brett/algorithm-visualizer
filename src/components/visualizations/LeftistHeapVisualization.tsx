@@ -276,7 +276,7 @@ export default function LeftistHeapVisualization({ speed }: LeftistHeapVisualiza
       <div className="mb-6">
         <h2 className="text-2xl font-bold mb-2">Leftist Heap</h2>
         <p className="text-muted-foreground">
-          Mergeable heap where left subtree is always "heavier" (higher NPL). Efficient merge operations.
+          Mergeable heap where left subtree is always &quot;heavier&quot; (higher NPL). Efficient merge operations.
         </p>
       </div>
 
