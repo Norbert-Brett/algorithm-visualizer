@@ -36,7 +36,7 @@ export default function SplayTreeVisualization({ speed }: SplayTreeVisualization
       if (!node) return null;
 
       // Calculate subtree sizes to determine spacing
-      const getSubtreeSize = (n: SplayNode | null): number => {
+      const getSubtreeSize = (n: SplayNode | null | undefined): number => {
         if (!n) return 0;
         return 1 + getSubtreeSize(n.left) + getSubtreeSize(n.right);
       };
