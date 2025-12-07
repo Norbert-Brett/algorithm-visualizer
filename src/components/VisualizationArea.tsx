@@ -44,6 +44,10 @@ import KruskalVisualization from "./visualizations/KruskalVisualization";
 import TopologicalSortIndegreeVisualization from "./visualizations/TopologicalSortIndegreeVisualization";
 import TopologicalSortDFSVisualization from "./visualizations/TopologicalSortDFSVisualization";
 import FloydWarshallVisualization from "./visualizations/FloydWarshallVisualization";
+import FibonacciVisualization from "./visualizations/FibonacciVisualization";
+import MakingChangeVisualization from "./visualizations/MakingChangeVisualization";
+import LCSVisualization from "./visualizations/LCSVisualization";
+import KnapsackVisualization from "./visualizations/KnapsackVisualization";
 
 interface VisualizationAreaProps {
   algorithm: Algorithm;
@@ -182,15 +186,13 @@ export default function VisualizationArea({
 
       // Dynamic Programming
       case "fibonacci":
-        return <ComingSoonVisualization algorithmName="Fibonacci Sequence" />;
+        return <FibonacciVisualization speed={speed} />;
       case "making-change":
-        return <ComingSoonVisualization algorithmName="Making Change" />;
+        return <MakingChangeVisualization speed={speed} />;
       case "longest-common-subsequence":
-        return (
-          <ComingSoonVisualization algorithmName="Longest Common Subsequence" />
-        );
+        return <LCSVisualization speed={speed} />;
       case "knapsack":
-        return <ComingSoonVisualization algorithmName="0/1 Knapsack" />;
+        return <KnapsackVisualization speed={speed} />;
 
       // Recursion & Backtracking
       case "recursion-factorial":

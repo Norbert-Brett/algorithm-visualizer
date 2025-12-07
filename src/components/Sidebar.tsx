@@ -470,6 +470,10 @@ const implementedAlgorithmIds = [
   "topological-sort-indegree",
   "topological-sort-dfs",
   "floyd-warshall",
+  "fibonacci",
+  "making-change",
+  "longest-common-subsequence",
+  "knapsack",
 ];
 
 export default function Sidebar({
