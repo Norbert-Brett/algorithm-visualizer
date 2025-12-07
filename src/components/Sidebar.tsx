@@ -483,6 +483,8 @@ const implementedAlgorithmIds = [
   "3d-rotation-scale",
   "3d-coordinate-systems",
   "disjoint-sets",
+  "shuffle",
+  "indexing",
 ];
 
 export default function Sidebar({

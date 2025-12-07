@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,9 @@ import { Plus, Minus, Search, RotateCcw, Network } from "lucide-react";
 
 interface BPlusTreeVisualizationProps {
   speed: number;
+  resetTrigger?: number;
+  isPlaying?: boolean;
+  onAnimationStateChange?: (isAnimating: boolean) => void;
 }
 
 interface BPlusTreeNode {
@@ -22,7 +25,7 @@ interface BPlusTreeNode {
   parent?: BPlusTreeNode | null;
 }
 
-export default function BPlusTreeVisualization({ speed }: BPlusTreeVisualizationProps) {
+export default function BPlusTreeVisualization({ speed, resetTrigger, isPlaying = true, onAnimationStateChange }: BPlusTreeVisualizationProps) {
   const [root, setRoot] = useState<BPlusTreeNode | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [searchValue, setSearchValue] = useState("");
@@ -32,6 +35,7 @@ export default function BPlusTreeVisualization({ speed }: BPlusTreeVisualization
   const [isSearching, setIsSearching] = useState(false);
   const [searchResult, setSearchResult] = useState("");
   const [currentSearchNode, setCurrentSearchNode] = useState<string | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
 
   const maxKeys = order - 1;
   const minKeys = Math.ceil(order / 2) - 1;
@@ -87,6 +91,26 @@ export default function BPlusTreeVisualization({ speed }: BPlusTreeVisualization
     []
   );
 
+  // Helper to wait with pause support
+  const delay = useCallback((ms: number) => {
+    return new Promise<void>((resolve) => {
+      const startTime = Date.now();
+      const checkPause = () => {
+        if (!isPaused) {
+          const elapsed = Date.now() - startTime;
+          if (elapsed >= ms) {
+            resolve();
+          } else {
+            setTimeout(checkPause, 50);
+          }
+        } else {
+          setTimeout(checkPause, 100);
+        }
+      };
+      checkPause();
+    });
+  }, [isPaused]);
+
   const searchInBPlusTree = async (value: number): Promise<void> => {
     if (!root) {
       setSearchResult(`${value} not found - tree is empty`);
@@ -94,6 +118,7 @@ export default function BPlusTreeVisualization({ speed }: BPlusTreeVisualization
     }
 
     setIsSearching(true);
+    onAnimationStateChange?.(true);
     setSearchPath([]);
     setSearchResult("Starting search...");
     setCurrentSearchNode(null);
@@ -117,9 +142,7 @@ export default function BPlusTreeVisualization({ speed }: BPlusTreeVisualization
         setSearchResult(`Searching node, going to child ${i}...`);
       }
 
-      await new Promise((resolve) =>
-        setTimeout(resolve, Math.max(800, 1200 / speed))
-      );
+      await delay(Math.max(800, 1200 / speed));
 
       if (current.isLeaf) {
         const found = current.keys.includes(value);
@@ -129,6 +152,7 @@ export default function BPlusTreeVisualization({ speed }: BPlusTreeVisualization
           setSearchResult(`❌ ${value} not found in tree`);
         }
         setIsSearching(false);
+        onAnimationStateChange?.(false);
         setCurrentSearchNode(null);
         setTimeout(() => {
           setSearchPath([]);
@@ -141,6 +165,7 @@ export default function BPlusTreeVisualization({ speed }: BPlusTreeVisualization
 
     setSearchResult(`❌ ${value} not found in tree`);
     setIsSearching(false);
+    onAnimationStateChange?.(false);
     setCurrentSearchNode(null);
     setTimeout(() => {
       setSearchPath([]);
@@ -199,6 +224,13 @@ export default function BPlusTreeVisualization({ speed }: BPlusTreeVisualization
 
         return { node: updatedNode };
       } else {
+        // Ensure child exists before recursing
+        // In B+ tree, internal nodes should have children.length = keys.length + 1
+        if (i >= node.children.length || !node.children[i]) {
+          console.error('Invalid tree state: child missing at index', i, 'keys:', node.keys, 'children count:', node.children.length);
+          return { node };
+        }
+        
         const childResult = insertIntoBPlusTree(node.children[i], value);
         const newChildren = [...node.children];
         newChildren[i] = childResult.node;
@@ -220,10 +252,10 @@ export default function BPlusTreeVisualization({ speed }: BPlusTreeVisualization
           };
 
           if (newKeys.length > maxKeys) {
-            const midIndex = Math.ceil(newKeys.length / 2);
+            const midIndex = Math.floor(newKeys.length / 2);
             const leftKeys = newKeys.slice(0, midIndex);
-            const rightKeys = newKeys.slice(midIndex);
-            const promotedKey = rightKeys[0];
+            const rightKeys = newKeys.slice(midIndex + 1); // Skip the promoted key
+            const promotedKey = newKeys[midIndex]; // The middle key gets promoted
 
             const leftChildren = newChildren.slice(0, midIndex + 1);
             const rightChildren = newChildren.slice(midIndex + 1);
@@ -312,6 +344,23 @@ export default function BPlusTreeVisualization({ speed }: BPlusTreeVisualization
     setOrder(ord);
     clearTree();
   };
+
+  // Sync pause state with parent's isPlaying (only when searching)
+  useEffect(() => {
+    if (isSearching) {
+      setIsPaused(!isPlaying);
+    }
+  }, [isPlaying, isSearching]);
+
+  // Handle reset trigger from parent
+  useEffect(() => {
+    if (resetTrigger !== undefined && resetTrigger > 0) {
+      setIsSearching(false);
+      setIsPaused(false);
+      onAnimationStateChange?.(false);
+      clearTree();
+    }
+  }, [resetTrigger]);
 
   const renderBPlusTreeNode = (node: BPlusTreeNode): React.ReactElement => {
     const isInSearchPath = searchPath.includes(node.id);

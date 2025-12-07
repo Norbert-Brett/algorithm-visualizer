@@ -81,8 +81,10 @@ export type Algorithm =
 export default function AlgorithmVisualizer() {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<Algorithm>("stack");
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [speed, setSpeed] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [resetTrigger, setResetTrigger] = useState(0);
 
   return (
     <div className="min-h-screen bg-background">
@@ -121,14 +123,36 @@ export default function AlgorithmVisualizer() {
                 algorithm={selectedAlgorithm}
                 isPlaying={isPlaying}
                 speed={speed}
+                resetTrigger={resetTrigger}
                 onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+                onAnimationStateChange={(animating) => {
+                  console.log('AlgorithmVisualizer: animation state changed to', animating);
+                  setIsAnimating(animating);
+                  if (animating) {
+                    console.log('Setting isPlaying to true');
+                    setIsPlaying(true);
+                  }
+                }}
               />
             </Card>
           </main>
           <Separator />
           <ControlPanel 
             isPlaying={isPlaying}
-            onPlayPause={() => setIsPlaying(!isPlaying)}
+            isAnimating={isAnimating}
+            onPlayPause={() => {
+              console.log('Play/Pause clicked, current isPlaying:', isPlaying);
+              setIsPlaying(!isPlaying);
+            }}
+            onStop={() => {
+              setIsPlaying(false);
+              setIsAnimating(false);
+              setResetTrigger(prev => prev + 1);
+            }}
+            onReset={() => {
+              setIsAnimating(false);
+              setResetTrigger(prev => prev + 1);
+            }}
             speed={speed}
             onSpeedChange={setSpeed}
             algorithm={selectedAlgorithm}

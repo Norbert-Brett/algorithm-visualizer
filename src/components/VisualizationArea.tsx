@@ -57,12 +57,16 @@ import CoordinateSystems2DVisualization from "./visualizations/CoordinateSystems
 import Rotation3DScaleVisualization from "./visualizations/Rotation3DScaleVisualization";
 import CoordinateSystems3DVisualization from "./visualizations/CoordinateSystems3DVisualization";
 import DisjointSetsVisualization from "./visualizations/DisjointSetsVisualization";
+import FisherYatesShuffleVisualization from "./visualizations/FisherYatesShuffleVisualization";
+import IndexingVisualization from "./visualizations/IndexingVisualization";
 
 interface VisualizationAreaProps {
   algorithm: Algorithm;
   isPlaying: boolean;
   speed: number;
+  resetTrigger: number;
   onToggleSidebar?: () => void;
+  onAnimationStateChange?: (isAnimating: boolean) => void;
 }
 
 // Placeholder component for algorithms not yet implemented
@@ -87,7 +91,9 @@ export default function VisualizationArea({
   algorithm,
   isPlaying,
   speed,
+  resetTrigger,
   onToggleSidebar,
+  onAnimationStateChange,
 }: VisualizationAreaProps) {
   const renderVisualization = () => {
     switch (algorithm) {
@@ -103,7 +109,7 @@ export default function VisualizationArea({
 
       // Sorting Algorithms
       case "bubble-sort":
-        return <BubbleSortVisualization isPlaying={isPlaying} speed={speed} />;
+        return <BubbleSortVisualization isPlaying={isPlaying} speed={speed} resetTrigger={resetTrigger} onAnimationStateChange={onAnimationStateChange} />;
       case "selection-sort":
         return (
           <SelectionSortVisualization isPlaying={isPlaying} speed={speed} />
@@ -145,7 +151,7 @@ export default function VisualizationArea({
       case "splay-tree":
         return <SplayTreeVisualization speed={speed} />;
       case "b-plus-tree":
-        return <BPlusTreeVisualization speed={speed} />;
+        return <BPlusTreeVisualization speed={speed} isPlaying={isPlaying} resetTrigger={resetTrigger} onAnimationStateChange={onAnimationStateChange} />;
       case "trie":
         return <TrieVisualization speed={speed} />;
       case "radix-tree":
@@ -229,9 +235,9 @@ export default function VisualizationArea({
 
       // Miscellaneous
       case "shuffle":
-        return <ComingSoonVisualization algorithmName="Fisher-Yates Shuffle" />;
+        return <FisherYatesShuffleVisualization speed={speed} />;
       case "indexing":
-        return <ComingSoonVisualization algorithmName="Indexing Techniques" />;
+        return <IndexingVisualization speed={speed} />;
 
       default:
         return (

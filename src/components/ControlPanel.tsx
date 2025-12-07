@@ -1,11 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Play, Pause, RotateCcw, SkipForward, SkipBack } from "lucide-react";
+import { Play, Pause, RotateCcw, Square } from "lucide-react";
 import { Algorithm } from "./AlgorithmVisualizer";
 
 interface ControlPanelProps {
   isPlaying: boolean;
+  isAnimating: boolean;
   onPlayPause: () => void;
+  onStop: () => void;
+  onReset: () => void;
   speed: number;
   onSpeedChange: (speed: number) => void;
   algorithm: Algorithm;
@@ -13,30 +16,49 @@ interface ControlPanelProps {
 
 export default function ControlPanel({
   isPlaying,
+  isAnimating,
   onPlayPause,
+  onStop,
+  onReset,
   speed,
   onSpeedChange,
   algorithm,
 }: ControlPanelProps) {
+  console.log('ControlPanel render:', { isPlaying, isAnimating, speed });
+  
   return (
     <div className="min-h-[5rem] bg-background border-t px-3 sm:px-6 py-3 shadow-sm">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm">
-              <SkipBack className="h-4 w-4" />
-            </Button>
-            <Button onClick={onPlayPause} size="sm">
+            <Button 
+              onClick={onPlayPause} 
+              size="sm"
+              title={isPlaying ? "Pause" : "Play"}
+              disabled={!isAnimating}
+              variant={isAnimating ? "default" : "outline"}
+            >
               {isPlaying ? (
                 <Pause className="h-4 w-4" />
               ) : (
                 <Play className="h-4 w-4" />
               )}
             </Button>
-            <Button variant="outline" size="sm">
-              <SkipForward className="h-4 w-4" />
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={onStop}
+              title="Stop"
+              disabled={!isAnimating}
+            >
+              <Square className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="sm">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={onReset}
+              title="Reset"
+            >
               <RotateCcw className="h-4 w-4" />
             </Button>
           </div>

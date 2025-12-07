@@ -7,65 +7,44 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Shuffle, Play, RotateCcw } from "lucide-react";
 
-interface BubbleSortVisualizationProps {
-  isPlaying: boolean;
+interface FisherYatesShuffleVisualizationProps {
+  isPlaying?: boolean;
   speed: number;
-  resetTrigger?: number;
-  onAnimationStateChange?: (isAnimating: boolean) => void;
 }
 
 interface ArrayItem {
   id: number;
   value: number;
-  isComparing?: boolean;
-  isSwapping?: boolean;
-  isSorted?: boolean;
+  isCurrentIndex?: boolean;
+  isRandomIndex?: boolean;
+  isShuffled?: boolean;
 }
 
-export default function BubbleSortVisualization({
-  isPlaying,
+export default function FisherYatesShuffleVisualization({
   speed,
-  resetTrigger,
-  onAnimationStateChange,
-}: BubbleSortVisualizationProps) {
+}: FisherYatesShuffleVisualizationProps) {
   const [array, setArray] = useState<ArrayItem[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [isPaused, setIsPaused] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [totalSteps, setTotalSteps] = useState(0);
 
-  // Initialize with random array
+  // Initialize with sequential array
   useEffect(() => {
-    generateRandomArray();
+    generateSequentialArray();
   }, []);
 
-  // Sync pause state with isPlaying prop (only when animating)
-  useEffect(() => {
-    console.log('BubbleSort: isPlaying changed to', isPlaying, 'isAnimating:', isAnimating);
-    if (isAnimating) {
-      setIsPaused(!isPlaying);
-      console.log('Setting isPaused to', !isPlaying);
-    }
-  }, [isPlaying, isAnimating]);
-
-  // Handle reset trigger
-  useEffect(() => {
-    if (resetTrigger !== undefined && resetTrigger > 0) {
-      setIsAnimating(false);
-      setIsPaused(false);
-      onAnimationStateChange?.(false);
-      reset();
-    }
-  }, [resetTrigger]);
-
-  const generateRandomArray = () => {
+  const generateSequentialArray = () => {
     const newArray: ArrayItem[] = [];
     for (let i = 0; i < 8; i++) {
       newArray.push({
         id: i,
-        value: Math.floor(Math.random() * 100) + 1,
+        value: i + 1,
       });
     }
     setArray(newArray);
+    setCurrentStep(0);
+    setTotalSteps(0);
   };
 
   const addElement = () => {
@@ -80,81 +59,59 @@ export default function BubbleSortVisualization({
     }
   };
 
-  // Helper to wait with pause support
-  const delay = (ms: number) => {
-    return new Promise<void>((resolve) => {
-      const startTime = Date.now();
-      const checkPause = () => {
-        if (!isPaused) {
-          const elapsed = Date.now() - startTime;
-          if (elapsed >= ms) {
-            resolve();
-          } else {
-            setTimeout(checkPause, 50);
-          }
-        } else {
-          setTimeout(checkPause, 100);
-        }
-      };
-      checkPause();
-    });
-  };
-
-  const bubbleSort = async () => {
+  const fisherYatesShuffle = async () => {
     if (isAnimating) return;
 
-    console.log('Starting bubble sort, calling onAnimationStateChange(true)');
     setIsAnimating(true);
-    onAnimationStateChange?.(true);
     const arr = [...array];
     const n = arr.length;
+    setTotalSteps(n);
 
-    for (let i = 0; i < n - 1; i++) {
-      for (let j = 0; j < n - i - 1; j++) {
-        // Highlight comparing elements
-        arr[j].isComparing = true;
-        arr[j + 1].isComparing = true;
-        setArray([...arr]);
-        await delay(1000 / speed);
+    for (let i = n - 1; i > 0; i--) {
+      setCurrentStep(n - i);
 
-        if (arr[j].value > arr[j + 1].value) {
-          // Highlight swapping elements
-          arr[j].isSwapping = true;
-          arr[j + 1].isSwapping = true;
-          setArray([...arr]);
-          await delay(500 / speed);
+      // Highlight current index
+      arr[i].isCurrentIndex = true;
+      setArray([...arr]);
+      await new Promise((resolve) => setTimeout(resolve, 800 / speed));
 
-          // Swap
-          [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-          setArray([...arr]);
-          await delay(500 / speed);
+      // Pick random index
+      const j = Math.floor(Math.random() * (i + 1));
+      arr[j].isRandomIndex = true;
+      setArray([...arr]);
+      await new Promise((resolve) => setTimeout(resolve, 800 / speed));
 
-          arr[j].isSwapping = false;
-          arr[j + 1].isSwapping = false;
-        }
+      // Swap elements
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+      setArray([...arr]);
+      await new Promise((resolve) => setTimeout(resolve, 600 / speed));
 
-        arr[j].isComparing = false;
-        arr[j + 1].isComparing = false;
-      }
-      // Mark as sorted
-      arr[n - 1 - i].isSorted = true;
+      // Mark as shuffled and clear highlights
+      arr[i].isShuffled = true;
+      arr[i].isCurrentIndex = false;
+      arr[j].isRandomIndex = false;
+      setArray([...arr]);
+      await new Promise((resolve) => setTimeout(resolve, 400 / speed));
     }
-    arr[0].isSorted = true;
+
+    // Mark first element as shuffled
+    arr[0].isShuffled = true;
     setArray([...arr]);
     setIsAnimating(false);
-    onAnimationStateChange?.(false);
   };
 
   const reset = () => {
     setArray((prev) =>
       prev.map((item) => ({
         ...item,
-        isComparing: false,
-        isSwapping: false,
-        isSorted: false,
+        isCurrentIndex: false,
+        isRandomIndex: false,
+        isShuffled: false,
       }))
     );
     setIsAnimating(false);
+    setCurrentStep(0);
+    setTotalSteps(0);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -167,11 +124,12 @@ export default function BubbleSortVisualization({
     <div className="h-full flex flex-col p-2 sm:p-0">
       <div className="mb-4 sm:mb-6">
         <h2 className="text-xl sm:text-2xl font-bold mb-2 text-foreground">
-          Bubble Sort Visualization
+          Fisher-Yates Shuffle Visualization
         </h2>
         <p className="text-sm sm:text-base text-muted-foreground">
-          Bubble sort repeatedly steps through the list, compares adjacent
-          elements and swaps them if they are in the wrong order.
+          The Fisher-Yates shuffle algorithm produces an unbiased random permutation
+          by iterating through the array and swapping each element with a randomly
+          selected element from the remaining unshuffled portion.
         </p>
       </div>
 
@@ -201,11 +159,11 @@ export default function BubbleSortVisualization({
 
           <div className="flex gap-2">
             <Button
-              onClick={bubbleSort}
+              onClick={fisherYatesShuffle}
               disabled={isAnimating || array.length < 2}
             >
               <Play className="h-4 w-4 mr-2" />
-              Sort
+              Shuffle
             </Button>
             <Button onClick={reset} variant="outline" disabled={isAnimating}>
               <RotateCcw className="h-4 w-4 mr-2" />
@@ -214,12 +172,12 @@ export default function BubbleSortVisualization({
           </div>
 
           <Button
-            onClick={generateRandomArray}
+            onClick={generateSequentialArray}
             variant="outline"
             disabled={isAnimating}
           >
             <Shuffle className="h-4 w-4 mr-2" />
-            Random Array
+            Sequential Array
           </Button>
 
           <div className="pt-4 border-t">
@@ -231,34 +189,42 @@ export default function BubbleSortVisualization({
               <div className="flex items-center justify-between">
                 <span>Status:</span>
                 <Badge variant={isAnimating ? "default" : "outline"}>
-                  {isAnimating ? "Sorting..." : "Ready"}
+                  {isAnimating ? "Shuffling..." : "Ready"}
                 </Badge>
               </div>
+              {isAnimating && (
+                <div className="flex items-center justify-between">
+                  <span>Progress:</span>
+                  <Badge variant="secondary">
+                    {currentStep} / {totalSteps}
+                  </Badge>
+                </div>
+              )}
             </div>
 
             <div className="mt-4 space-y-2 text-xs">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-yellow-500 rounded"></div>
+                <div className="w-3 h-3 bg-blue-500 rounded"></div>
                 <span className="text-muted-foreground font-medium">
-                  Comparing
+                  Current Index
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-destructive rounded"></div>
+                <div className="w-3 h-3 bg-purple-500 rounded"></div>
                 <span className="text-muted-foreground font-medium">
-                  Swapping
+                  Random Index
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-green-600 rounded"></div>
                 <span className="text-muted-foreground font-medium">
-                  Sorted
+                  Shuffled
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-muted-foreground rounded"></div>
                 <span className="text-muted-foreground font-medium">
-                  Unsorted
+                  Unshuffled
                 </span>
               </div>
             </div>
@@ -279,23 +245,23 @@ export default function BubbleSortVisualization({
                     w-full rounded-t-lg flex items-end justify-center
                     transition-colors duration-300
                     ${
-                      item.isSorted
+                      item.isShuffled
                         ? "bg-green-600"
-                        : item.isSwapping
-                        ? "bg-destructive"
-                        : item.isComparing
-                        ? "bg-yellow-500"
+                        : item.isCurrentIndex
+                        ? "bg-blue-500"
+                        : item.isRandomIndex
+                        ? "bg-purple-500"
                         : "bg-muted-foreground"
                     }
                   `}
-                  style={{ height: `${item.value * 2}px`, minHeight: '20px' }}
+                  style={{ height: `${item.value * 20}px`, minHeight: '40px' }}
                   animate={{
-                    scale: item.isComparing || item.isSwapping ? 1.1 : 1,
-                    y: item.isSwapping ? -10 : 0,
+                    scale: item.isCurrentIndex || item.isRandomIndex ? 1.15 : 1,
+                    y: item.isCurrentIndex || item.isRandomIndex ? -10 : 0,
                   }}
                   transition={{ duration: 0.3 }}
                 >
-                  <span className="text-white text-[10px] sm:text-xs font-mono mb-1">
+                  <span className="text-white text-xs sm:text-sm font-mono mb-1 font-bold">
                     {item.value}
                   </span>
                 </motion.div>
