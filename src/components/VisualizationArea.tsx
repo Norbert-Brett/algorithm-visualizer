@@ -56,6 +56,7 @@ import Rotation2DTranslationVisualization from "./visualizations/Rotation2DTrans
 import CoordinateSystems2DVisualization from "./visualizations/CoordinateSystems2DVisualization";
 import Rotation3DScaleVisualization from "./visualizations/Rotation3DScaleVisualization";
 import CoordinateSystems3DVisualization from "./visualizations/CoordinateSystems3DVisualization";
+import DisjointSetsVisualization from "./visualizations/DisjointSetsVisualization";
 
 interface VisualizationAreaProps {
   algorithm: Algorithm;
@@ -224,9 +225,7 @@ export default function VisualizationArea({
 
       // Advanced Data Structures
       case "disjoint-sets":
-        return (
-          <ComingSoonVisualization algorithmName="Disjoint Sets (Union-Find)" />
-        );
+        return <DisjointSetsVisualization speed={speed} />;
 
       // Miscellaneous
       case "shuffle":
