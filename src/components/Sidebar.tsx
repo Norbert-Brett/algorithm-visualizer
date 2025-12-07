@@ -455,6 +455,7 @@ const implementedAlgorithmIds = [
   "radix-sort",
   "linear-search",
   "binary-search",
+  "binary-search-sorted",
   "dfs",
   "bfs",
   "dijkstra",

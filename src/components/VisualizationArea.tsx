@@ -32,6 +32,7 @@ import BPlusTreeVisualization from "./visualizations/BPlusTreeVisualization";
 import TrieVisualization from "./visualizations/TrieVisualization";
 import RadixTreeVisualization from "./visualizations/RadixTreeVisualization";
 import TernarySearchTreeVisualization from "./visualizations/TernarySearchTreeVisualization";
+import BinarySearchSortedVisualization from "./visualizations/BinarySearchSortedVisualization";
 
 interface VisualizationAreaProps {
   algorithm: Algorithm;
@@ -138,9 +139,7 @@ export default function VisualizationArea({
 
       // Additional Search Algorithms
       case "binary-search-sorted":
-        return (
-          <ComingSoonVisualization algorithmName="Binary Search (Sorted List)" />
-        );
+        return <BinarySearchSortedVisualization speed={speed} />;
 
       // Additional Sorting Algorithms
       case "insertion-sort":
