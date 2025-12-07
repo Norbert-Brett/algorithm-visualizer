@@ -463,7 +463,13 @@ const implementedAlgorithmIds = [
   "binary-search-sorted",
   "dfs",
   "bfs",
+  "connected-components",
   "dijkstra",
+  "prim-mst",
+  "kruskal",
+  "topological-sort-indegree",
+  "topological-sort-dfs",
+  "floyd-warshall",
 ];
 
 export default function Sidebar({

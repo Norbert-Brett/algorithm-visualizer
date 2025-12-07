@@ -38,6 +38,12 @@ import TrieVisualization from "./visualizations/TrieVisualization";
 import RadixTreeVisualization from "./visualizations/RadixTreeVisualization";
 import TernarySearchTreeVisualization from "./visualizations/TernarySearchTreeVisualization";
 import BinarySearchSortedVisualization from "./visualizations/BinarySearchSortedVisualization";
+import ConnectedComponentsVisualization from "./visualizations/ConnectedComponentsVisualization";
+import PrimMSTVisualization from "./visualizations/PrimMSTVisualization";
+import KruskalVisualization from "./visualizations/KruskalVisualization";
+import TopologicalSortIndegreeVisualization from "./visualizations/TopologicalSortIndegreeVisualization";
+import TopologicalSortDFSVisualization from "./visualizations/TopologicalSortDFSVisualization";
+import FloydWarshallVisualization from "./visualizations/FloydWarshallVisualization";
 
 interface VisualizationAreaProps {
   algorithm: Algorithm;
@@ -160,23 +166,19 @@ export default function VisualizationArea({
 
       // Graph Algorithms
       case "connected-components":
-        return <ComingSoonVisualization algorithmName="Connected Components" />;
+        return <ConnectedComponentsVisualization speed={speed} />;
       case "dijkstra":
         return <DijkstraVisualization speed={speed} />;
       case "prim-mst":
-        return <ComingSoonVisualization algorithmName="Prim's MST" />;
+        return <PrimMSTVisualization speed={speed} />;
       case "kruskal":
-        return <ComingSoonVisualization algorithmName="Kruskal's Algorithm" />;
+        return <KruskalVisualization speed={speed} />;
       case "topological-sort-indegree":
-        return (
-          <ComingSoonVisualization algorithmName="Topological Sort (Indegree)" />
-        );
+        return <TopologicalSortIndegreeVisualization speed={speed} />;
       case "topological-sort-dfs":
-        return (
-          <ComingSoonVisualization algorithmName="Topological Sort (DFS)" />
-        );
+        return <TopologicalSortDFSVisualization speed={speed} />;
       case "floyd-warshall":
-        return <ComingSoonVisualization algorithmName="Floyd-Warshall" />;
+        return <FloydWarshallVisualization speed={speed} />;
 
       // Dynamic Programming
       case "fibonacci":
