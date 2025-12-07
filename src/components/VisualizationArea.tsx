@@ -28,6 +28,10 @@ import BinomialQueueVisualization from "./visualizations/BinomialQueueVisualizat
 import FibonacciHeapVisualization from "./visualizations/FibonacciHeapVisualization";
 import LeftistHeapVisualization from "./visualizations/LeftistHeapVisualization";
 import SkewHeapVisualization from "./visualizations/SkewHeapVisualization";
+import BPlusTreeVisualization from "./visualizations/BPlusTreeVisualization";
+import TrieVisualization from "./visualizations/TrieVisualization";
+import RadixTreeVisualization from "./visualizations/RadixTreeVisualization";
+import TernarySearchTreeVisualization from "./visualizations/TernarySearchTreeVisualization";
 
 interface VisualizationAreaProps {
   algorithm: Algorithm;
@@ -104,13 +108,13 @@ export default function VisualizationArea({
       case "splay-tree":
         return <SplayTreeVisualization speed={speed} />;
       case "b-plus-tree":
-        return <ComingSoonVisualization algorithmName="B+ Tree" />;
+        return <BPlusTreeVisualization speed={speed} />;
       case "trie":
-        return <ComingSoonVisualization algorithmName="Trie (Prefix Tree)" />;
+        return <TrieVisualization speed={speed} />;
       case "radix-tree":
-        return <ComingSoonVisualization algorithmName="Radix Tree" />;
+        return <RadixTreeVisualization speed={speed} />;
       case "ternary-search-tree":
-        return <ComingSoonVisualization algorithmName="Ternary Search Tree" />;
+        return <TernarySearchTreeVisualization speed={speed} />;
 
       // Hash Tables
       case "open-hash-table":
