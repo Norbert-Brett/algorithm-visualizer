@@ -51,6 +51,11 @@ import KnapsackVisualization from "./visualizations/KnapsackVisualization";
 import FactorialVisualization from "./visualizations/FactorialVisualization";
 import StringReversalVisualization from "./visualizations/StringReversalVisualization";
 import NQueensVisualization from "./visualizations/NQueensVisualization";
+import Rotation2DScaleVisualization from "./visualizations/Rotation2DScaleVisualization";
+import Rotation2DTranslationVisualization from "./visualizations/Rotation2DTranslationVisualization";
+import CoordinateSystems2DVisualization from "./visualizations/CoordinateSystems2DVisualization";
+import Rotation3DScaleVisualization from "./visualizations/Rotation3DScaleVisualization";
+import CoordinateSystems3DVisualization from "./visualizations/CoordinateSystems3DVisualization";
 
 interface VisualizationAreaProps {
   algorithm: Algorithm;
@@ -207,21 +212,15 @@ export default function VisualizationArea({
 
       // Geometric Algorithms
       case "2d-rotation-scale":
-        return <ComingSoonVisualization algorithmName="2D Rotation & Scale" />;
+        return <Rotation2DScaleVisualization speed={speed} />;
       case "2d-rotation-translation":
-        return (
-          <ComingSoonVisualization algorithmName="2D Rotation & Translation" />
-        );
+        return <Rotation2DTranslationVisualization speed={speed} />;
       case "2d-coordinate-systems":
-        return (
-          <ComingSoonVisualization algorithmName="2D Coordinate Systems" />
-        );
+        return <CoordinateSystems2DVisualization speed={speed} />;
       case "3d-rotation-scale":
-        return <ComingSoonVisualization algorithmName="3D Rotation & Scale" />;
+        return <Rotation3DScaleVisualization speed={speed} />;
       case "3d-coordinate-systems":
-        return (
-          <ComingSoonVisualization algorithmName="3D Coordinate Systems" />
-        );
+        return <CoordinateSystems3DVisualization speed={speed} />;
 
       // Advanced Data Structures
       case "disjoint-sets":

@@ -477,6 +477,11 @@ const implementedAlgorithmIds = [
   "recursion-factorial",
   "string-reversal",
   "n-queens",
+  "2d-rotation-scale",
+  "2d-rotation-translation",
+  "2d-coordinate-systems",
+  "3d-rotation-scale",
+  "3d-coordinate-systems",
 ];
 
 export default function Sidebar({
