@@ -48,6 +48,9 @@ import FibonacciVisualization from "./visualizations/FibonacciVisualization";
 import MakingChangeVisualization from "./visualizations/MakingChangeVisualization";
 import LCSVisualization from "./visualizations/LCSVisualization";
 import KnapsackVisualization from "./visualizations/KnapsackVisualization";
+import FactorialVisualization from "./visualizations/FactorialVisualization";
+import StringReversalVisualization from "./visualizations/StringReversalVisualization";
+import NQueensVisualization from "./visualizations/NQueensVisualization";
 
 interface VisualizationAreaProps {
   algorithm: Algorithm;
@@ -196,13 +199,11 @@ export default function VisualizationArea({
 
       // Recursion & Backtracking
       case "recursion-factorial":
-        return (
-          <ComingSoonVisualization algorithmName="Factorial (Recursive)" />
-        );
+        return <FactorialVisualization speed={speed} />;
       case "string-reversal":
-        return <ComingSoonVisualization algorithmName="String Reversal" />;
+        return <StringReversalVisualization speed={speed} />;
       case "n-queens":
-        return <ComingSoonVisualization algorithmName="N-Queens Problem" />;
+        return <NQueensVisualization speed={speed} />;
 
       // Geometric Algorithms
       case "2d-rotation-scale":

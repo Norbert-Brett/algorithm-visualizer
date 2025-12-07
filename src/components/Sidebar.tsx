@@ -474,6 +474,9 @@ const implementedAlgorithmIds = [
   "making-change",
   "longest-common-subsequence",
   "knapsack",
+  "recursion-factorial",
+  "string-reversal",
+  "n-queens",
 ];
 
 export default function Sidebar({
