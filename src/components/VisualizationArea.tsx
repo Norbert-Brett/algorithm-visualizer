@@ -12,8 +12,13 @@ import RedBlackTreeVisualization from "./visualizations/RedBlackTreeVisualizatio
 import SplayTreeVisualization from "./visualizations/SplayTreeVisualization";
 import BubbleSortVisualization from "./visualizations/BubbleSortVisualization";
 import SelectionSortVisualization from "./visualizations/SelectionSortVisualization";
+import InsertionSortVisualization from "./visualizations/InsertionSortVisualization";
+import ShellSortVisualization from "./visualizations/ShellSortVisualization";
 import MergeSortVisualization from "./visualizations/MergeSortVisualization";
+import QuickSortVisualization from "./visualizations/QuickSortVisualization";
 import HeapSortVisualization from "./visualizations/HeapSortVisualization";
+import BucketSortVisualization from "./visualizations/BucketSortVisualization";
+import CountingSortVisualization from "./visualizations/CountingSortVisualization";
 import RadixSortVisualization from "./visualizations/RadixSortVisualization";
 import LinearSearchVisualization from "./visualizations/LinearSearchVisualization";
 import BinarySearchVisualization from "./visualizations/BinarySearchVisualization";
@@ -84,10 +89,22 @@ export default function VisualizationArea({
         return (
           <SelectionSortVisualization isPlaying={isPlaying} speed={speed} />
         );
+      case "insertion-sort":
+        return (
+          <InsertionSortVisualization isPlaying={isPlaying} speed={speed} />
+        );
+      case "shell-sort":
+        return <ShellSortVisualization isPlaying={isPlaying} speed={speed} />;
       case "merge-sort":
         return <MergeSortVisualization isPlaying={isPlaying} speed={speed} />;
+      case "quick-sort":
+        return <QuickSortVisualization isPlaying={isPlaying} speed={speed} />;
       case "heap-sort":
         return <HeapSortVisualization isPlaying={isPlaying} speed={speed} />;
+      case "bucket-sort":
+        return <BucketSortVisualization isPlaying={isPlaying} speed={speed} />;
+      case "counting-sort":
+        return <CountingSortVisualization isPlaying={isPlaying} speed={speed} />;
       case "radix-sort":
         return <RadixSortVisualization isPlaying={isPlaying} speed={speed} />;
 
@@ -140,18 +157,6 @@ export default function VisualizationArea({
       // Additional Search Algorithms
       case "binary-search-sorted":
         return <BinarySearchSortedVisualization speed={speed} />;
-
-      // Additional Sorting Algorithms
-      case "insertion-sort":
-        return <ComingSoonVisualization algorithmName="Insertion Sort" />;
-      case "shell-sort":
-        return <ComingSoonVisualization algorithmName="Shell Sort" />;
-      case "quick-sort":
-        return <ComingSoonVisualization algorithmName="Quick Sort" />;
-      case "bucket-sort":
-        return <ComingSoonVisualization algorithmName="Bucket Sort" />;
-      case "counting-sort":
-        return <ComingSoonVisualization algorithmName="Counting Sort" />;
 
       // Graph Algorithms
       case "connected-components":

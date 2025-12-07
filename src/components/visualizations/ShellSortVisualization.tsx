@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Shuffle, Play, RotateCcw } from "lucide-react";
 
-interface MergeSortVisualizationProps {
+interface ShellSortVisualizationProps {
   isPlaying: boolean;
   speed: number;
 }
@@ -16,16 +16,19 @@ interface ArrayItem {
   id: number;
   value: number;
   isComparing?: boolean;
-  isMerging?: boolean;
+  isSwapping?: boolean;
   isSorted?: boolean;
-  isInLeftSubarray?: boolean;
-  isInRightSubarray?: boolean;
+  isInGap?: boolean;
 }
 
-export default function MergeSortVisualization({ speed }: MergeSortVisualizationProps) {
+export default function ShellSortVisualization({
+  speed,
+}: ShellSortVisualizationProps) {
   const [array, setArray] = useState<ArrayItem[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [currentGap, setCurrentGap] = useState<number | null>(null);
+  const [nextId, setNextId] = useState(0);
 
   useEffect(() => {
     generateRandomArray();
@@ -33,144 +36,127 @@ export default function MergeSortVisualization({ speed }: MergeSortVisualization
 
   const generateRandomArray = () => {
     const newArray: ArrayItem[] = [];
+    const baseId = Date.now() * 1000;
     for (let i = 0; i < 8; i++) {
       newArray.push({
-        id: Date.now() + i, // Use timestamp + index for unique IDs
+        id: baseId + i,
         value: Math.floor(Math.random() * 100) + 1,
       });
     }
     setArray(newArray);
+    setNextId(baseId + 8);
+    setCurrentGap(null);
   };
 
   const addElement = () => {
     const value = parseInt(inputValue);
     if (!isNaN(value) && value > 0 && value <= 100) {
       const newItem: ArrayItem = {
-        id: Date.now() + Math.random(), // Ensure unique ID
+        id: nextId,
         value: value,
       };
-      setArray(prev => [...prev, newItem]);
+      setArray((prev) => [...prev, newItem]);
+      setNextId(nextId + 1);
       setInputValue("");
     }
   };
 
-  const mergeSort = async () => {
+  const shellSort = async () => {
     if (isAnimating) return;
-    
+
     setIsAnimating(true);
     const arr = [...array];
-    await mergeSortHelper(arr, 0, arr.length - 1);
-    
+    const n = arr.length;
+
+    // Start with a large gap, then reduce
+    for (let gap = Math.floor(n / 2); gap > 0; gap = Math.floor(gap / 2)) {
+      setCurrentGap(gap);
+      await new Promise((resolve) => setTimeout(resolve, 1000 / speed));
+
+      // Do a gapped insertion sort
+      for (let i = gap; i < n; i++) {
+        const temp = arr[i].value;
+        const tempId = arr[i].id;
+        
+        // Highlight elements in current gap
+        arr[i].isInGap = true;
+        if (i - gap >= 0) {
+          arr[i - gap].isInGap = true;
+        }
+        setArray([...arr]);
+        await new Promise((resolve) => setTimeout(resolve, 600 / speed));
+
+        let j = i;
+        
+        // Shift elements until correct position is found
+        while (j >= gap) {
+          arr[j].isComparing = true;
+          arr[j - gap].isComparing = true;
+          setArray([...arr]);
+          await new Promise((resolve) => setTimeout(resolve, 600 / speed));
+
+          if (arr[j - gap].value > temp) {
+            // Swap elements
+            arr[j].isSwapping = true;
+            arr[j - gap].isSwapping = true;
+            setArray([...arr]);
+            await new Promise((resolve) => setTimeout(resolve, 400 / speed));
+
+            // Generate new unique ID to avoid duplicates
+            arr[j] = { 
+              id: Date.now() * 1000 + Math.random() * 1000,
+              value: arr[j - gap].value,
+            };
+            
+            setArray([...arr]);
+            await new Promise((resolve) => setTimeout(resolve, 300 / speed));
+            
+            j -= gap;
+          } else {
+            arr[j].isComparing = false;
+            arr[j - gap].isComparing = false;
+            break;
+          }
+        }
+
+        // Place temp at correct position with new unique ID
+        arr[j] = {
+          id: Date.now() * 1000 + Math.random() * 1000,
+          value: temp,
+        };
+        
+        // Clear all flags
+        for (let k = 0; k < n; k++) {
+          arr[k].isInGap = false;
+          arr[k].isComparing = false;
+          arr[k].isSwapping = false;
+        }
+        
+        setArray([...arr]);
+        await new Promise((resolve) => setTimeout(resolve, 300 / speed));
+      }
+    }
+
     // Mark all as sorted
-    arr.forEach(item => {
+    arr.forEach((item) => {
       item.isSorted = true;
-      item.isComparing = false;
-      item.isMerging = false;
-      item.isInLeftSubarray = false;
-      item.isInRightSubarray = false;
     });
     setArray([...arr]);
+    setCurrentGap(null);
     setIsAnimating(false);
   };
 
-  const mergeSortHelper = async (arr: ArrayItem[], left: number, right: number) => {
-    if (left >= right) return;
-
-    const mid = Math.floor((left + right) / 2);
-    
-    // Highlight left subarray
-    for (let i = left; i <= mid; i++) {
-      arr[i].isInLeftSubarray = true;
-    }
-    setArray([...arr]);
-    await new Promise(resolve => setTimeout(resolve, 800 / speed));
-
-    // Highlight right subarray
-    for (let i = mid + 1; i <= right; i++) {
-      arr[i].isInRightSubarray = true;
-    }
-    setArray([...arr]);
-    await new Promise(resolve => setTimeout(resolve, 800 / speed));
-
-    // Recursively sort left and right halves
-    await mergeSortHelper(arr, left, mid);
-    await mergeSortHelper(arr, mid + 1, right);
-    
-    // Merge the sorted halves
-    await merge(arr, left, mid, right);
-  };
-
-  const merge = async (arr: ArrayItem[], left: number, mid: number, right: number) => {
-    const leftArr = arr.slice(left, mid + 1);
-    const rightArr = arr.slice(mid + 1, right + 1);
-    
-    let i = 0, j = 0, k = left;
-
-    while (i < leftArr.length && j < rightArr.length) {
-      // Highlight comparing elements
-      if (k < arr.length) {
-        arr[k].isComparing = true;
-      }
-      setArray([...arr]);
-      await new Promise(resolve => setTimeout(resolve, 600 / speed));
-
-      if (leftArr[i].value <= rightArr[j].value) {
-        arr[k] = { ...leftArr[i], id: Date.now() + Math.random() };
-        arr[k].isMerging = true;
-        i++;
-      } else {
-        arr[k] = { ...rightArr[j], id: Date.now() + Math.random() };
-        arr[k].isMerging = true;
-        j++;
-      }
-      
-      setArray([...arr]);
-      await new Promise(resolve => setTimeout(resolve, 400 / speed));
-      
-      arr[k].isMerging = false;
-      arr[k].isComparing = false;
-      k++;
-    }
-
-    // Copy remaining elements
-    while (i < leftArr.length) {
-      arr[k] = { ...leftArr[i], id: Date.now() + Math.random() };
-      arr[k].isMerging = true;
-      setArray([...arr]);
-      await new Promise(resolve => setTimeout(resolve, 300 / speed));
-      arr[k].isMerging = false;
-      i++;
-      k++;
-    }
-
-    while (j < rightArr.length) {
-      arr[k] = { ...rightArr[j], id: Date.now() + Math.random() };
-      arr[k].isMerging = true;
-      setArray([...arr]);
-      await new Promise(resolve => setTimeout(resolve, 300 / speed));
-      arr[k].isMerging = false;
-      j++;
-      k++;
-    }
-
-    // Clear subarray highlights
-    for (let i = left; i <= right; i++) {
-      arr[i].isInLeftSubarray = false;
-      arr[i].isInRightSubarray = false;
-    }
-    setArray([...arr]);
-    await new Promise(resolve => setTimeout(resolve, 400 / speed));
-  };
-
   const reset = () => {
-    setArray(prev => prev.map(item => ({
-      ...item,
-      isComparing: false,
-      isMerging: false,
-      isSorted: false,
-      isInLeftSubarray: false,
-      isInRightSubarray: false
-    })));
+    setArray((prev) =>
+      prev.map((item) => ({
+        ...item,
+        isComparing: false,
+        isSwapping: false,
+        isSorted: false,
+        isInGap: false,
+      }))
+    );
+    setCurrentGap(null);
     setIsAnimating(false);
   };
 
@@ -183,9 +169,11 @@ export default function MergeSortVisualization({ speed }: MergeSortVisualization
   return (
     <div className="h-full flex flex-col p-2 sm:p-0">
       <div className="mb-4 sm:mb-6">
-        <h2 className="text-xl sm:text-2xl font-bold mb-2 text-foreground">Merge Sort Visualization</h2>
+        <h2 className="text-xl sm:text-2xl font-bold mb-2 text-foreground">
+          Shell Sort Visualization
+        </h2>
         <p className="text-sm sm:text-base text-muted-foreground">
-          Merge sort divides the array into halves, recursively sorts them, and then merges the sorted halves.
+          Shell sort is an optimization of insertion sort that compares elements separated by a gap, which decreases over time.
         </p>
       </div>
 
@@ -199,19 +187,25 @@ export default function MergeSortVisualization({ speed }: MergeSortVisualization
                 type="number"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={handleKeyPress}
+                onKeyPress={handleKeyPress}
                 placeholder="Enter number..."
                 min="1"
                 max="100"
               />
-              <Button onClick={addElement} disabled={!inputValue || isAnimating}>
+              <Button
+                onClick={addElement}
+                disabled={!inputValue || isAnimating}
+              >
                 Add
               </Button>
             </div>
           </div>
-          
+
           <div className="flex gap-2">
-            <Button onClick={mergeSort} disabled={isAnimating || array.length < 2}>
+            <Button
+              onClick={shellSort}
+              disabled={isAnimating || array.length < 2}
+            >
               <Play className="h-4 w-4 mr-2" />
               Sort
             </Button>
@@ -221,7 +215,11 @@ export default function MergeSortVisualization({ speed }: MergeSortVisualization
             </Button>
           </div>
 
-          <Button onClick={generateRandomArray} variant="outline" disabled={isAnimating}>
+          <Button
+            onClick={generateRandomArray}
+            variant="outline"
+            disabled={isAnimating}
+          >
             <Shuffle className="h-4 w-4 mr-2" />
             Random Array
           </Button>
@@ -233,33 +231,43 @@ export default function MergeSortVisualization({ speed }: MergeSortVisualization
                 <Badge variant="secondary">{array.length}</Badge>
               </div>
               <div className="flex items-center justify-between">
+                <span>Current Gap:</span>
+                <Badge variant="default">
+                  {currentGap !== null ? currentGap : "—"}
+                </Badge>
+              </div>
+              <div className="flex items-center justify-between">
                 <span>Status:</span>
                 <Badge variant={isAnimating ? "default" : "outline"}>
                   {isAnimating ? "Sorting..." : "Ready"}
                 </Badge>
               </div>
             </div>
-            
+
             <div className="mt-4 space-y-2 text-xs">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-blue-500 rounded"></div>
-                <span className="text-muted-foreground font-medium">Left Subarray</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-purple-500 rounded"></div>
-                <span className="text-muted-foreground font-medium">Right Subarray</span>
+                <span className="text-muted-foreground font-medium">
+                  In Gap
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-yellow-500 rounded"></div>
-                <span className="text-muted-foreground font-medium">Comparing</span>
+                <span className="text-muted-foreground font-medium">
+                  Comparing
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-destructive rounded"></div>
-                <span className="text-muted-foreground font-medium">Merging</span>
+                <span className="text-muted-foreground font-medium">
+                  Swapping
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-green-600 rounded"></div>
-                <span className="text-muted-foreground font-medium">Sorted</span>
+                <span className="text-muted-foreground font-medium">
+                  Sorted
+                </span>
               </div>
             </div>
           </div>
@@ -278,15 +286,22 @@ export default function MergeSortVisualization({ speed }: MergeSortVisualization
                   className={`
                     w-full rounded-t-lg flex items-end justify-center
                     transition-colors duration-300
-                    ${item.isSorted ? 'bg-green-600' : 
-                      item.isMerging ? 'bg-destructive' :
-                      item.isComparing ? 'bg-yellow-500' :
-                      item.isInLeftSubarray ? 'bg-blue-500' :
-                      item.isInRightSubarray ? 'bg-purple-500' : 'bg-muted-foreground'}
+                    ${
+                      item.isSorted
+                        ? "bg-green-600"
+                        : item.isSwapping
+                        ? "bg-destructive"
+                        : item.isComparing
+                        ? "bg-yellow-500"
+                        : item.isInGap
+                        ? "bg-blue-500"
+                        : "bg-muted-foreground"
+                    }
                   `}
-                  style={{ height: `${item.value * 2}px`, minHeight: '20px' }}
+                  style={{ height: `${item.value * 2}px`, minHeight: "20px" }}
                   animate={{
-                    scale: item.isComparing || item.isMerging ? 1.1 : 1,
+                    scale: item.isComparing || item.isSwapping ? 1.1 : 1,
+                    y: item.isSwapping ? -10 : 0,
                   }}
                   transition={{ duration: 0.3 }}
                 >
