@@ -55,6 +55,7 @@ export type Algorithm =
   | "topological-sort-indegree"
   | "topological-sort-dfs"
   | "floyd-warshall"
+  | "pathfinding-grid"
   // Dynamic Programming
   | "fibonacci"
   | "making-change"

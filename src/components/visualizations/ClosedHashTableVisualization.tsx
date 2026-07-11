@@ -108,6 +108,13 @@ export default function ClosedHashTableVisualization({ speed }: ClosedHashTableV
     });
   }, []);
 
+  // Automatically update stats when slots change
+  useEffect(() => {
+    if (hashTable.slots && hashTable.slots.length > 0) {
+      updateStats(hashTable.slots);
+    }
+  }, [hashTable.slots, updateStats]);
+
   // Insert operation
   const insert = useCallback(async (key: string, value: number) => {
     if (!key.trim()) return;
@@ -200,9 +207,8 @@ export default function ClosedHashTableVisualization({ speed }: ClosedHashTableV
       currentOperation: ""
     }));
 
-    updateStats(hashTable.slots);
     setIsAnimating(false);
-  }, [hashFunction, probe, hashTable.size, hashTable.slots, speed, updateStats]);
+  }, [hashFunction, probe, hashTable.size, hashTable.slots, speed]);
 
   // Search operation
   const search = useCallback(async (key: string) => {
@@ -350,9 +356,8 @@ export default function ClosedHashTableVisualization({ speed }: ClosedHashTableV
       currentOperation: ""
     }));
 
-    updateStats(hashTable.slots);
     setIsAnimating(false);
-  }, [hashFunction, probe, hashTable.size, hashTable.slots, speed, updateStats]);
+  }, [hashFunction, probe, hashTable.size, hashTable.slots, speed]);
 
   const handleInsert = () => {
     const value = parseInt(inputValue);

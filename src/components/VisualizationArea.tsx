@@ -59,6 +59,7 @@ import CoordinateSystems3DVisualization from "./visualizations/CoordinateSystems
 import DisjointSetsVisualization from "./visualizations/DisjointSetsVisualization";
 import FisherYatesShuffleVisualization from "./visualizations/FisherYatesShuffleVisualization";
 import IndexingVisualization from "./visualizations/IndexingVisualization";
+import PathfindingGridVisualization from "./visualizations/PathfindingGridVisualization";
 
 interface VisualizationAreaProps {
   algorithm: Algorithm;
@@ -198,6 +199,15 @@ export default function VisualizationArea({
         return <TopologicalSortDFSVisualization speed={speed} />;
       case "floyd-warshall":
         return <FloydWarshallVisualization speed={speed} />;
+      case "pathfinding-grid":
+        return (
+          <PathfindingGridVisualization
+            speed={speed}
+            isPlaying={isPlaying}
+            resetTrigger={resetTrigger}
+            onAnimationStateChange={onAnimationStateChange}
+          />
+        );
 
       // Dynamic Programming
       case "fibonacci":

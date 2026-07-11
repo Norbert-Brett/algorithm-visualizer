@@ -105,6 +105,13 @@ export default function OpenHashTableVisualization({ speed }: OpenHashTableVisua
     });
   }, []);
 
+  // Automatically update stats when buckets change
+  useEffect(() => {
+    if (hashTable.buckets && hashTable.buckets.length > 0) {
+      updateStats(hashTable.buckets);
+    }
+  }, [hashTable.buckets, updateStats]);
+
   // Insert operation
   const insert = useCallback(async (key: string, value: number) => {
     if (!key.trim()) return;
@@ -184,10 +191,8 @@ export default function OpenHashTableVisualization({ speed }: OpenHashTableVisua
       currentOperation: ""
     }));
 
-    // Update stats
-    updateStats(hashTable.buckets);
     setIsAnimating(false);
-  }, [hashFunction, hashTable.size, hashTable.buckets, speed, updateStats]);
+  }, [hashFunction, hashTable.size, hashTable.buckets, speed]);
 
   // Search operation
   const search = useCallback(async (key: string) => {
@@ -298,9 +303,8 @@ export default function OpenHashTableVisualization({ speed }: OpenHashTableVisua
     }));
 
     // Update stats
-    updateStats(hashTable.buckets);
     setIsAnimating(false);
-  }, [hashFunction, hashTable.size, hashTable.buckets, speed, updateStats]);
+  }, [hashFunction, hashTable.size, speed]);
 
   const handleInsert = () => {
     const value = parseInt(inputValue);

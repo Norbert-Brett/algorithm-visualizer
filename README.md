@@ -10,75 +10,22 @@ A comprehensive, interactive web application for visualizing computer science al
 
 ## 🚀 Features
 
-### ✅ Currently Implemented (13/58 algorithms)
+### ✅ Currently Implemented (56/56 algorithms)
 
-#### **Basic Data Structures**
+All 56 computer science modules across 12 categories are fully implemented and interactive:
 
-- 📚 **Stack** - LIFO data structure with push/pop operations
-- 📋 **Queue** - FIFO data structure with enqueue/dequeue operations
-
-#### **Tree Data Structures**
-
-- 🌳 **Binary Search Tree (BST)** - Ordered binary tree with search, insert, delete
-- 🌲 **B-Tree** - Multi-way balanced tree for databases and file systems
-
-#### **Search Algorithms**
-
-- 🔍 **Linear Search** - Sequential search through array elements
-- 🎯 **Binary Search** - Efficient search on sorted arrays
-- 🕸️ **Depth-First Search (DFS)** - Graph traversal using stack (LIFO)
-- 🌊 **Breadth-First Search (BFS)** - Graph traversal using queue (FIFO)
-
-#### **Sorting Algorithms**
-
-- 🫧 **Bubble Sort** - Simple comparison-based sorting
-- 📊 **Selection Sort** - In-place comparison sorting
-- 🔀 **Merge Sort** - Divide and conquer sorting algorithm
-- 🏔️ **Heap Sort** - Heap-based sorting algorithm
-- 🔢 **Radix Sort** - Non-comparison digit-based sorting
-
-### 🚧 Coming Soon (45 more algorithms)
-
-<details>
-<summary>View Full Algorithm Roadmap</summary>
-
-#### **Advanced Tree Structures**
-
-- AVL Tree, Red-Black Tree, Splay Tree, B+ Tree, Trie, Radix Tree, Ternary Search Tree
-
-#### **Hash Tables**
-
-- Open Hash Table, Closed Hash Table, Bucket Hash Table
-
-#### **Advanced Sorting**
-
-- Insertion Sort, Shell Sort, Quick Sort, Bucket Sort, Counting Sort
-
-#### **Graph Algorithms**
-
-- Connected Components, Dijkstra's Algorithm, Prim's MST, Kruskal's MST, Topological Sort, Floyd-Warshall
-
-#### **Dynamic Programming**
-
-- Fibonacci Sequence, Making Change, Longest Common Subsequence, 0/1 Knapsack
-
-#### **Recursion & Backtracking**
-
-- Recursive Factorial, String Reversal, N-Queens Problem
-
-#### **Heap Structures**
-
-- Binary Heap, Binomial Queue, Fibonacci Heap, Leftist Heap, Skew Heap
-
-#### **Geometric Algorithms**
-
-- 2D/3D Transformations, Coordinate Systems
-
-#### **Advanced Data Structures**
-
-- Disjoint Sets (Union-Find)
-
-</details>
+1. **Basic Data Structures**: Stack, Queue
+2. **Tree Data Structures**: Binary Search Tree (BST), AVL Tree, Red-Black Tree, Splay Tree, B-Tree, B+ Tree, Trie (Prefix Tree), Radix Tree, Ternary Search Tree
+3. **Hash Tables**: Open Hash Table, Closed Hash Table, Bucket Hash Table
+4. **Heap Data Structures**: Binary Heap, Binomial Queue, Fibonacci Heap, Leftist Heap, Skew Heap
+5. **Search Algorithms**: Linear Search, Binary Search, Binary Search (Sorted)
+6. **Sorting Algorithms**: Bubble Sort, Selection Sort, Insertion Sort, Shell Sort, Merge Sort, Quick Sort, Heap Sort, Bucket Sort, Counting Sort, Radix Sort
+7. **Graph Algorithms**: Depth-First Search (DFS), Breadth-First Search (BFS), Connected Components, Dijkstra's Algorithm, Prim's MST, Kruskal's Algorithm, Topological Sort (Indegree), Topological Sort (DFS), Floyd-Warshall
+8. **Dynamic Programming**: Fibonacci Sequence, Making Change, Longest Common Subsequence, 0/1 Knapsack
+9. **Recursion & Backtracking**: Factorial (Recursive), String Reversal, N-Queens Problem
+10. **Geometric Algorithms**: 2D Rotation & Scale, 2D Rotation & Translation, 2D Coordinate Systems, 3D Rotation & Scale, 3D Coordinate Systems
+11. **Advanced Data Structures**: Disjoint Sets (Union-Find)
+12. **Miscellaneous**: Fisher-Yates Shuffle, Indexing Techniques
 
 ## 🛠️ Tech Stack
 

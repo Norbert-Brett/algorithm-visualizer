@@ -314,6 +314,12 @@ const algorithms = [
         icon: MapPin,
         description: "All pairs shortest paths",
       },
+      {
+        id: "pathfinding-grid" as Algorithm,
+        name: "Pathfinding Grid",
+        icon: Grid3X3,
+        description: "A* & Dijkstra maze search",
+      },
     ],
   },
   {
@@ -476,6 +482,7 @@ const implementedAlgorithmIds = [
   "topological-sort-indegree",
   "topological-sort-dfs",
   "floyd-warshall",
+  "pathfinding-grid",
   "fibonacci",
   "making-change",
   "longest-common-subsequence",

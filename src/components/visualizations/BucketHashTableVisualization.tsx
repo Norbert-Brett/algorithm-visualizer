@@ -111,6 +111,13 @@ export default function BucketHashTableVisualization({ speed }: BucketHashTableV
     });
   }, [hashTable.bucketCapacity]);
 
+  // Automatically update stats when buckets change
+  useEffect(() => {
+    if (hashTable.buckets && hashTable.buckets.length > 0) {
+      updateStats(hashTable.buckets);
+    }
+  }, [hashTable.buckets, updateStats]);
+
   // Insert operation
   const insert = useCallback(async (key: string, value: number) => {
     if (!key.trim()) return;
@@ -214,7 +221,6 @@ export default function BucketHashTableVisualization({ speed }: BucketHashTableV
       currentOperation: ""
     }));
 
-    updateStats(hashTable.buckets);
     setIsAnimating(false);
   }, [hashFunction, hashTable.size, hashTable.buckets, speed, updateStats]);
 
@@ -329,7 +335,6 @@ export default function BucketHashTableVisualization({ speed }: BucketHashTableV
       currentOperation: ""
     }));
 
-    updateStats(hashTable.buckets);
     setIsAnimating(false);
   }, [hashFunction, hashTable.size, hashTable.buckets, speed, updateStats]);
 

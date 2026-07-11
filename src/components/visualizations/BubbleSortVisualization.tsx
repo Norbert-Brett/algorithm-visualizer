@@ -31,6 +31,7 @@ export default function BubbleSortVisualization({
   const [array, setArray] = useState<ArrayItem[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [customInput, setCustomInput] = useState("");
   const [isPaused, setIsPaused] = useState(false);
 
   // Initialize with random array
@@ -77,6 +78,22 @@ export default function BubbleSortVisualization({
       };
       setArray((prev) => [...prev, newItem]);
       setInputValue("");
+    }
+  };
+
+  const importCustomArray = () => {
+    const parsedValues = customInput
+      .split(",")
+      .map((val) => parseInt(val.trim()))
+      .filter((val) => !isNaN(val) && val > 0 && val <= 100);
+
+    if (parsedValues.length > 0) {
+      const newArray = parsedValues.map((value, index) => ({
+        id: index,
+        value,
+      }));
+      setArray(newArray);
+      setCustomInput("");
     }
   };
 
@@ -195,6 +212,25 @@ export default function BubbleSortVisualization({
                 disabled={!inputValue || isAnimating}
               >
                 Add
+              </Button>
+            </div>
+          </div>
+          <div className="space-y-2 pt-2 border-t border-border/40">
+            <label className="text-xs uppercase font-mono tracking-wider text-muted-foreground">Import Custom Array</label>
+            <div className="flex gap-2">
+              <Input
+                value={customInput}
+                onChange={(e) => setCustomInput(e.target.value)}
+                placeholder="e.g., 20, 5, 85, 10, 45"
+                disabled={isAnimating}
+                className="text-xs bg-background/50 hover:bg-background transition-colors rounded-lg border-border/50 placeholder:text-muted-foreground/60"
+              />
+              <Button
+                onClick={importCustomArray}
+                disabled={!customInput.trim() || isAnimating}
+                className="text-xs font-semibold"
+              >
+                Import
               </Button>
             </div>
           </div>
