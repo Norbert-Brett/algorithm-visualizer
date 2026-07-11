@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Play, Pause, RotateCcw, Square } from "lucide-react";
@@ -24,67 +26,80 @@ export default function ControlPanel({
   onSpeedChange,
   algorithm,
 }: ControlPanelProps) {
-  console.log('ControlPanel render:', { isPlaying, isAnimating, speed });
-  
   return (
-    <div className="min-h-[5rem] bg-background border-t px-3 sm:px-6 py-3 shadow-sm">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-        <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
-          <div className="flex items-center gap-2">
-            <Button 
-              onClick={onPlayPause} 
-              size="sm"
-              title={isPlaying ? "Pause" : "Play"}
-              disabled={!isAnimating}
-              variant={isAnimating ? "default" : "outline"}
-            >
-              {isPlaying ? (
-                <Pause className="h-4 w-4" />
-              ) : (
-                <Play className="h-4 w-4" />
-              )}
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={onStop}
-              title="Stop"
-              disabled={!isAnimating}
-            >
-              <Square className="h-4 w-4" />
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={onReset}
-              title="Reset"
-            >
-              <RotateCcw className="h-4 w-4" />
-            </Button>
-          </div>
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-11/12 sm:w-[90%] max-w-xl">
+      <div className="glass px-3.5 sm:px-5 py-2.5 rounded-full shadow-xl flex items-center justify-between gap-4 bg-background/80 dark:bg-card/75 backdrop-blur-md border border-border/60">
+        
+        {/* Playback Controls */}
+        <div className="flex items-center gap-1.5 flex-shrink-0">
+          <Button
+            onClick={onPlayPause}
+            size="icon"
+            disabled={!isAnimating}
+            className={`h-8 w-8 rounded-full transition-all duration-200 active:scale-90 ${
+              isAnimating 
+                ? "bg-accent hover:bg-accent/90 text-accent-foreground shadow-sm shadow-accent/25" 
+                : "bg-muted text-muted-foreground opacity-50 cursor-not-allowed"
+            }`}
+            title={isPlaying ? "Pause" : "Play"}
+          >
+            {isPlaying ? (
+              <Pause className="h-3.5 w-3.5 fill-current" />
+            ) : (
+              <Play className="h-3.5 w-3.5 fill-current translate-x-[1px]" />
+            )}
+          </Button>
 
-          <div className="flex items-center gap-2 sm:gap-3 flex-1 sm:flex-initial">
-            <span className="text-sm text-foreground font-medium">Speed:</span>
-            <div className="w-20 sm:w-32">
-              <Slider
-                value={[speed]}
-                onValueChange={(value) => onSpeedChange(value[0])}
-                max={3}
-                min={0.5}
-                step={0.5}
-                className="w-full"
-              />
-            </div>
-            <span className="text-sm font-mono w-8">{speed}x</span>
-          </div>
+          <Button
+            onClick={onStop}
+            disabled={!isAnimating}
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 rounded-full hover:bg-muted text-foreground/80 hover:text-foreground transition-all duration-200 active:scale-90 disabled:opacity-40"
+            title="Stop Animation"
+          >
+            <Square className="h-3.5 w-3.5 fill-current" />
+          </Button>
+
+          <Button
+            onClick={onReset}
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 rounded-full hover:bg-muted text-foreground/80 hover:text-foreground transition-all duration-200 active:scale-90"
+            title="Reset Visualizer"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+          </Button>
         </div>
 
-        <div className="text-sm text-muted-foreground w-full sm:w-auto text-left sm:text-right">
-          <span className="hidden sm:inline">Current: </span>
-          <span className="font-medium capitalize text-foreground">
+        {/* Speed Slider */}
+        <div className="flex items-center gap-2 sm:gap-3 flex-grow max-w-[150px] sm:max-w-[180px]">
+          <span className="text-[10px] font-mono font-semibold tracking-wider text-muted-foreground uppercase hidden sm:inline">
+            Speed
+          </span>
+          <div className="flex-grow pt-0.5">
+            <Slider
+              value={[speed]}
+              onValueChange={(value) => onSpeedChange(value[0])}
+              max={3}
+              min={0.5}
+              step={0.5}
+              className="cursor-pointer"
+            />
+          </div>
+          <span className="text-xs font-mono font-semibold w-7 text-right text-foreground">
+            {speed}x
+          </span>
+        </div>
+
+        {/* Selected Module Indicator */}
+        <div className="text-[10px] font-mono text-muted-foreground text-right hidden sm:block flex-shrink-0">
+          <span className="opacity-60 uppercase tracking-widest text-[9px] block text-left">Module</span>
+          <span className="font-semibold text-foreground uppercase tracking-wider block text-left truncate max-w-[100px]">
             {algorithm.replace("-", " ")}
           </span>
         </div>
+        
       </div>
     </div>
   );

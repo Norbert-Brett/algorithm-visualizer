@@ -1,5 +1,9 @@
+"use client";
+
+import { useState, useEffect, useMemo } from "react";
+import { motion } from "framer-motion";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import {
   Layers,
   ArrowRight,
@@ -19,6 +23,8 @@ import {
   MapPin,
   Cpu,
   RotateCcw,
+  ChevronDown,
+  X,
 } from "lucide-react";
 import { Algorithm } from "./AlgorithmVisualizer";
 
@@ -492,7 +498,10 @@ export default function Sidebar({
   onAlgorithmSelect,
   onClose,
 }: SidebarProps) {
-  // Count total algorithms and implemented ones
+  const [searchQuery, setSearchQuery] = useState("");
+  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
+
+  // Count total and implemented
   const totalAlgorithms = algorithms.reduce(
     (sum, category) => sum + category.items.length,
     0
@@ -506,92 +515,210 @@ export default function Sidebar({
     );
   }, 0);
 
+  // Expand the active algorithm's category on mount or change (if not searching)
+  useEffect(() => {
+    if (!searchQuery) {
+      const activeCat = algorithms.find((cat) =>
+        cat.items.some((item) => item.id === selectedAlgorithm)
+      );
+      if (activeCat) {
+        setExpandedCategories((prev) => ({
+          ...prev,
+          [activeCat.category]: true,
+        }));
+      }
+    }
+  }, [selectedAlgorithm, searchQuery]);
+
+  // Handle search filtering
+  const filteredCategories = useMemo(() => {
+    return algorithms
+      .map((category) => {
+        const matchedItems = category.items.filter(
+          (item) =>
+            item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.description.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        return {
+          ...category,
+          items: matchedItems,
+        };
+      })
+      .filter((category) => category.items.length > 0);
+  }, [searchQuery]);
+
+  // Auto-expand categories with matches when query is present
+  useEffect(() => {
+    if (searchQuery) {
+      const autoExpanded: Record<string, boolean> = {};
+      filteredCategories.forEach((cat) => {
+        autoExpanded[cat.category] = true;
+      });
+      setExpandedCategories(autoExpanded);
+    }
+  }, [searchQuery, filteredCategories]);
+
+  const toggleCategory = (categoryName: string) => {
+    setExpandedCategories((prev) => ({
+      ...prev,
+      [categoryName]: !prev[categoryName],
+    }));
+  };
+
   return (
-    <aside className="w-80 h-fit border-r bg-sidebar p-4 overflow-y-auto max-h-screen">
-      <div className="space-y-6">
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-lg font-semibold text-sidebar-foreground">
-              Algorithm Visualizer
-            </h2>
-            {onClose && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onClose}
-                className="lg:hidden"
-              >
-                ✕
-              </Button>
-            )}
-          </div>
-          <p className="text-xs text-muted-foreground mb-4">
-            {implementedAlgorithms} of {totalAlgorithms} algorithms implemented
-          </p>
-          <div className="space-y-4">
-            {algorithms.map((category) => {
-              const categoryImplemented = category.items.filter((item) =>
-                implementedAlgorithmIds.includes(item.id)
-              ).length;
-
-              return (
-                <Card
-                  key={category.category}
-                  className="p-3 sm:p-4 hover:shadow-md transition-shadow"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-medium text-sm text-muted-foreground uppercase tracking-wide">
-                      {category.category}
-                    </h3>
-                    <span className="text-xs bg-muted px-2 py-1 rounded-full">
-                      {categoryImplemented}/{category.items.length}
-                    </span>
-                  </div>
-                  <div className="space-y-2">
-                    {category.items.map((algorithm) => {
-                      const Icon = algorithm.icon;
-                      const isImplemented = implementedAlgorithmIds.includes(algorithm.id);
-
-                      return (
-                        <Button
-                          key={algorithm.id}
-                          variant={
-                            selectedAlgorithm === algorithm.id
-                              ? "default"
-                              : "ghost"
-                          }
-                          className={`w-full justify-start h-auto p-2 sm:p-3 ${
-                            !isImplemented ? "opacity-60" : ""
-                          }`}
-                          onClick={() => onAlgorithmSelect(algorithm.id)}
-                        >
-                          <div className="flex items-start gap-2 sm:gap-3">
-                            <Icon className="h-4 w-4 sm:h-5 sm:w-5 mt-0.5 flex-shrink-0" />
-                            <div className="text-left flex-1 min-w-0">
-                              <div className="flex items-center gap-2">
-                                <span className="font-medium text-sm sm:text-base truncate">
-                                  {algorithm.name}
-                                </span>
-                                {!isImplemented && (
-                                  <span className="text-[10px] sm:text-xs bg-orange-100 text-orange-700 px-1 sm:px-1.5 py-0.5 rounded flex-shrink-0">
-                                    Soon
-                                  </span>
-                                )}
-                              </div>
-                              <div className="text-[10px] sm:text-xs text-muted-foreground">
-                                {algorithm.description}
-                              </div>
-                            </div>
-                          </div>
-                        </Button>
-                      );
-                    })}
-                  </div>
-                </Card>
-              );
-            })}
-          </div>
+    <aside className="w-full max-w-[320px] sm:w-80 h-full border-r bg-sidebar/50 backdrop-blur-md flex flex-col">
+      {/* Header Info */}
+      <div className="p-4 border-b border-border/50">
+        <div className="flex items-center justify-between mb-1.5">
+          <h2 className="text-sm font-semibold tracking-tight text-foreground font-sans">
+            Algorithm Catalog
+          </h2>
+          {onClose && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              className="lg:hidden h-7 w-7 rounded-full hover:bg-muted/80"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          )}
         </div>
+        <p className="text-[11px] text-muted-foreground font-sans">
+          {implementedAlgorithms} of {totalAlgorithms} modules compiled
+        </p>
+
+        {/* Search Bar */}
+        <div className="relative mt-3">
+          <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
+          <Input
+            placeholder="Search catalog..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-8 pr-8 h-8.5 text-xs bg-background/50 hover:bg-background/80 focus:bg-background transition-all duration-200 border-border/50 rounded-lg placeholder:text-muted-foreground/75"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-2.5 top-2.5 text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Accordion Scroll Area */}
+      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-3.5 custom-scrollbar">
+        {filteredCategories.map((category) => {
+          const isExpanded = !!expandedCategories[category.category];
+          const categoryImplemented = category.items.filter((item) =>
+            implementedAlgorithmIds.includes(item.id)
+          ).length;
+
+          return (
+            <div key={category.category} className="space-y-1.5">
+              {/* Category Header */}
+              <button
+                onClick={() => toggleCategory(category.category)}
+                className="w-full flex items-center justify-between py-1 text-[11px] font-semibold text-muted-foreground hover:text-foreground transition-colors group tracking-wider uppercase font-mono"
+              >
+                <div className="flex items-center gap-1.5">
+                  <ChevronDown
+                    className={`h-3 w-3 transition-transform duration-200 ${
+                      isExpanded ? "rotate-0" : "-rotate-90"
+                    } text-muted-foreground group-hover:text-foreground`}
+                  />
+                  <span>{category.category}</span>
+                </div>
+                <span className="text-[9px] bg-muted/65 text-muted-foreground font-sans px-1.5 py-0.2 rounded-full font-normal">
+                  {categoryImplemented}/{category.items.length}
+                </span>
+              </button>
+
+              {/* Collapsible Content */}
+              {isExpanded && (
+                <div className="space-y-1 pl-1 origin-top transition-all duration-300">
+                  {category.items.map((algorithm) => {
+                    const Icon = algorithm.icon;
+                    const isSelected = selectedAlgorithm === algorithm.id;
+                    const isImplemented = implementedAlgorithmIds.includes(
+                      algorithm.id
+                    );
+
+                    return (
+                      <button
+                        key={algorithm.id}
+                        onClick={() =>
+                          isImplemented && onAlgorithmSelect(algorithm.id)
+                        }
+                        disabled={!isImplemented}
+                        className={`
+                          w-full flex items-start gap-2.5 p-2 rounded-lg text-left transition-all duration-200 relative group
+                          ${
+                            isSelected
+                              ? "bg-accent/10 text-accent font-medium"
+                              : "hover:bg-muted/40 text-muted-foreground hover:text-foreground"
+                          }
+                          ${
+                            !isImplemented
+                              ? "opacity-45 cursor-not-allowed"
+                              : "cursor-pointer"
+                          }
+                        `}
+                      >
+                        {isSelected && (
+                          <motion.div
+                            layoutId="active-indicator"
+                            className="absolute left-0 top-1.5 bottom-1.5 w-0.75 bg-accent rounded-full"
+                            transition={{
+                              type: "spring",
+                              stiffness: 350,
+                              damping: 30,
+                            }}
+                          />
+                        )}
+                        <Icon
+                          className={`h-4 w-4 mt-0.5 flex-shrink-0 transition-colors ${
+                            isSelected
+                              ? "text-accent"
+                              : "text-muted-foreground group-hover:text-foreground"
+                          }`}
+                        />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1 justify-between">
+                            <span
+                              className={`text-[12.5px] truncate font-sans tracking-tight leading-none ${
+                                isSelected
+                                  ? "text-foreground font-semibold"
+                                  : "font-medium"
+                              }`}
+                            >
+                              {algorithm.name}
+                            </span>
+                            {!isImplemented && (
+                              <span className="text-[8px] font-bold border border-amber-500/15 text-amber-500 bg-amber-500/5 px-1 py-0.2 rounded-sm flex-shrink-0 font-sans tracking-wide">
+                                SOON
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-[10px] text-muted-foreground truncate group-hover:text-muted-foreground/80 mt-0.5">
+                            {algorithm.description}
+                          </p>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          );
+        })}
+        {filteredCategories.length === 0 && (
+          <div className="text-center py-8 text-xs text-muted-foreground">
+            No matching algorithms found.
+          </div>
+        )}
       </div>
     </aside>
   );

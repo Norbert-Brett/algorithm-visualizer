@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import VisualizationArea from "./VisualizationArea";
@@ -87,20 +85,25 @@ export default function AlgorithmVisualizer() {
   const [resetTrigger, setResetTrigger] = useState(0);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative overflow-hidden flex flex-col">
+      {/* Ambient background glows */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[radial-gradient(circle,_var(--ring)_0%,_transparent_75%)] opacity-10 dark:opacity-5 blur-[120px] pointer-events-none z-0" />
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[radial-gradient(circle,_var(--ring)_0%,_transparent_75%)] opacity-8 dark:opacity-4 blur-[130px] pointer-events-none z-0" />
+      
       <Header />
-      <div className="flex h-[calc(100vh-4rem)] relative">
+      
+      <div className="flex-1 flex h-[calc(100vh-4rem)] relative z-10">
         {/* Mobile sidebar overlay */}
         {sidebarOpen && (
           <div 
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            className="fixed inset-0 bg-black/60 dark:bg-black/80 z-40 lg:hidden backdrop-blur-xs transition-opacity duration-300"
             onClick={() => setSidebarOpen(false)}
           />
         )}
         
-        {/* Sidebar */}
+        {/* Sidebar container */}
         <div className={`
-          fixed lg:relative lg:translate-x-0 z-50 lg:z-auto
+          fixed lg:relative lg:translate-x-0 z-50 lg:z-auto h-full
           transition-transform duration-300 ease-in-out
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
           lg:block
@@ -115,28 +118,26 @@ export default function AlgorithmVisualizer() {
           />
         </div>
 
-        {/* Main content */}
-        <div className="flex-1 flex flex-col min-w-0">
-          <main className="flex-1 p-3 sm:p-6 bg-muted/30">
-            <Card className="h-full shadow-sm">
-              <VisualizationArea 
-                algorithm={selectedAlgorithm}
-                isPlaying={isPlaying}
-                speed={speed}
-                resetTrigger={resetTrigger}
-                onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-                onAnimationStateChange={(animating) => {
-                  console.log('AlgorithmVisualizer: animation state changed to', animating);
-                  setIsAnimating(animating);
-                  if (animating) {
-                    console.log('Setting isPlaying to true');
-                    setIsPlaying(true);
-                  }
-                }}
-              />
-            </Card>
+        {/* Main content area */}
+        <div className="flex-1 flex flex-col min-w-0 h-full relative">
+          <main className="flex-1 p-4 sm:p-6 pb-28 sm:pb-32 overflow-y-auto bg-grid-pattern relative">
+            <VisualizationArea 
+              algorithm={selectedAlgorithm}
+              isPlaying={isPlaying}
+              speed={speed}
+              resetTrigger={resetTrigger}
+              onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+              onAnimationStateChange={(animating) => {
+                console.log('AlgorithmVisualizer: animation state changed to', animating);
+                setIsAnimating(animating);
+                if (animating) {
+                  console.log('Setting isPlaying to true');
+                  setIsPlaying(true);
+                }
+              }}
+            />
           </main>
-          <Separator />
+          
           <ControlPanel 
             isPlaying={isPlaying}
             isAnimating={isAnimating}
