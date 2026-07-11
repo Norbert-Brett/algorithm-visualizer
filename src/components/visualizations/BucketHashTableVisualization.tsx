@@ -222,7 +222,7 @@ export default function BucketHashTableVisualization({ speed }: BucketHashTableV
     }));
 
     setIsAnimating(false);
-  }, [hashFunction, hashTable.size, hashTable.buckets, speed, updateStats]);
+  }, [hashFunction, hashTable.size, hashTable.buckets, speed]);
 
   // Search operation
   const search = useCallback(async (key: string) => {
@@ -336,7 +336,7 @@ export default function BucketHashTableVisualization({ speed }: BucketHashTableV
     }));
 
     setIsAnimating(false);
-  }, [hashFunction, hashTable.size, hashTable.buckets, speed, updateStats]);
+  }, [hashFunction, hashTable.size, speed]);
 
   const handleInsert = () => {
     const value = parseInt(inputValue);
